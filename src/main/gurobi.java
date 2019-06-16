@@ -25,14 +25,14 @@ public class gurobi {
             solver.setInt(5, false);
 
 
-            //solver.setBinary(1, true);
-            //solver.setBinary(2, true);
-            //solver.setBinary(3, true);
+            //linearproblem.solver.setBinary(1, true);
+            //linearproblem.solver.setBinary(2, true);
+            //linearproblem.solver.setBinary(3, true);
 
 
             solver.setMinim();
 
-            // solve the problem
+            // Solver the problem
             solver.solve();
 
 

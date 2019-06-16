@@ -1,15 +1,15 @@
 package CuttingStock;
 
 
-import LinearOptimization.LinearOptimizationProblem;
-import LinearOptimization.MinimumLinearOptimizationProblem;
+import linearproblem.LinearProblem;
+
 
 import java.util.Vector;
 
 
 public class MasterProblem {
 
-    private LinearOptimizationProblem master;
+    private LinearProblem master;
 
     public MasterProblem(CuttingStockInstance cuttingStockInstance) {
 
@@ -18,7 +18,7 @@ public class MasterProblem {
         Vector<CuttingStockItem> demand = cuttingStockInstance.getDemand();
 
 
-        this.master = new MinimumLinearOptimizationProblem(demand.size(), demand.size());
+        //this.master = new MinimumLinearProblem(demand.size(), demand.size());
 
         int index = 0;
         for (CuttingStockItem item : demand) {

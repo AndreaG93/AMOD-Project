@@ -1,18 +1,28 @@
-package LinearOptimization;
+package linearproblem;
 
-import LinearOptimization.math.Matrix;
-
+import linearproblem.math.MathematicalSymbol;
+import linearproblem.math.Matrix;
+import linearproblem.type.LinearProblemType;
 import java.util.Locale;
 import java.util.Vector;
 
-public abstract class LinearOptimizationProblem {
+public class LinearProblem {
+
+    private final LinearProblemType type;
 
     private Vector<Double> coefficientObjectiveFunction;
     private Vector<Double> knownCoefficients;
-    private Vector<ConstraintsInequalitySymbol> constraintsInequalitySymbols;
+    private Vector<MathematicalSymbol> constraintsInequalitySymbols;
     private Matrix constraintsCoefficients;
 
-    public LinearOptimizationProblem(int initialNumberOfVariables, int initialNumberOfConstrains) {
+    LinearProblem(LinearProblemType type, int initialNumberOfVariables, int initialNumberOfConstrains) {
+        this.type = type;
+
+
+
+    }
+
+    public void initialize(int initialNumberOfVariables, int initialNumberOfConstrains) {
 
         this.coefficientObjectiveFunction = new Vector<>();
         for (int i = 0; i < initialNumberOfVariables; i++)
@@ -26,7 +36,12 @@ public abstract class LinearOptimizationProblem {
 
         this.constraintsInequalitySymbols = new Vector<>();
         for (int i = 0; i < initialNumberOfConstrains; i++)
-            this.constraintsInequalitySymbols.add(ConstraintsInequalitySymbol.GEQ);
+            this.constraintsInequalitySymbols.add(MathematicalSymbol.GEQ);
+    }
+
+
+    public LinearProblemType getType() {
+        return type;
     }
 
     public void setVariableCoefficientOfObjectiveFunction(int variableIndex, double value) {
@@ -37,13 +52,16 @@ public abstract class LinearOptimizationProblem {
         this.knownCoefficients.set(constraintIndex, value);
     }
 
-    public void setConstraintsInequalitySymbols(int constraintIndex, ConstraintsInequalitySymbol value) {
+    public void setConstraintsInequalitySymbols(int constraintIndex, MathematicalSymbol value) {
         this.constraintsInequalitySymbols.set(constraintIndex, value);
     }
 
     public void setConstraintsCoefficient(int constraintIndex, int variableIndex, double value) {
         this.constraintsCoefficients.setValue(constraintIndex, variableIndex, value);
     }
+
+
+    /***** */
 
     public void printAsLatexString() {
 

@@ -1,4 +1,4 @@
-import LinearOptimization.math.Matrix;
+import linearproblem.math.Matrix;
 import org.junit.jupiter.api.Test;
 import java.util.Vector;
 import static org.junit.jupiter.api.Assertions.assertEquals;

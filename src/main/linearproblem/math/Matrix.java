@@ -1,4 +1,4 @@
-package LinearOptimization.math;
+package linearproblem.math;
 
 import java.util.Locale;
 import java.util.Vector;
@@ -47,7 +47,8 @@ public class Matrix {
         }
     }
 
-    public Vector<Double> getRow(int rowIndex){
-        return this.matrix.get(rowIndex);
+    public double[] getRow(int rowIndex){
+        double[] arr = this.matrix.get(rowIndex).stream().mapToDouble(d -> d).toArray();
+        return arr;
     }
 }
