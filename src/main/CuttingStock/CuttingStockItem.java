@@ -1,20 +1,20 @@
 package CuttingStock;
 
-public class CuttingStockItem {
+class CuttingStockItem {
 
     private final double amount;
     private final double length;
 
-    public CuttingStockItem(double amount, double length) {
+    CuttingStockItem(double amount, double length) {
         this.amount = amount;
         this.length = length;
     }
 
-    public double getAmount() {
+    double getAmount() {
         return amount;
     }
 
-    public double getLength() {
+    double getLength() {
         return length;
     }
 }

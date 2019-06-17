@@ -5,22 +5,25 @@ import java.util.*;
 public class CuttingStockInstance {
 
     private final double maxItemLength;
-    private Vector<CuttingStockItem> demand;
+    private ArrayList<CuttingStockItem> items;
 
     public CuttingStockInstance(double maxItemLength) {
         this.maxItemLength = maxItemLength;
-        this.demand = new Vector<>();
     }
 
-    public void addCuttingStockItem(CuttingStockItem item) {
-        this.demand.add(item);
+    public void addItems(double amount, double length) {
+        this.items.add(new CuttingStockItem(amount, length));
     }
 
     public double getMaxItemLength() {
         return maxItemLength;
     }
 
-    public Vector<CuttingStockItem> getDemand() {
-        return demand;
+    public int getNumberOfItems() {
+        return this.items.size();
+    }
+
+    public ArrayList<CuttingStockItem> getItems() {
+        return items;
     }
 }
