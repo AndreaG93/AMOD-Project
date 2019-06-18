@@ -1,28 +1,27 @@
 import lpsolve.*;
 
+import gurobi.*;
+
 public class gurobi {
 
     public static void main(String[] args) {
         try {
             // Create a problem with 4 variables and 0 constraints
-            LpSolve solver = LpSolve.makeLp(0, 5);
+            LpSolve solver = LpSolve.makeLp(5, 5);
 
             // add constraints
             solver.strAddConstraint("5 0 0 0 0", LpSolve.EQ & LpSolve.GE, 48);
             solver.strAddConstraint("0 2 0 0 0", LpSolve.EQ & LpSolve.GE, 35);
             solver.strAddConstraint("0 0 2 0 0", LpSolve.EQ & LpSolve.GE, 24);
             solver.strAddConstraint("0 0 0 2 0", LpSolve.EQ & LpSolve.GE, 10);
-            solver.strAddConstraint("0 0 0 0 1", LpSolve.EQ & LpSolve.GE, 8);
-
+            solver.addConstraint(new double[]{0.0d,0.0d,0.0d,0.0d,1.0d}, LpSolve.EQ & LpSolve.GE, 8d);
 
             // set objective function
             solver.strSetObjFn("1 1 1 1 1");
 
-            solver.setInt(1, false);
-            solver.setInt(2, false);
-            solver.setInt(3, false);
-            solver.setInt(4, false);
-            solver.setInt(5, false);
+            double[] ff = solver.getPtrConstraints();
+
+
 
 
             //linearproblem.solver.setBinary(1, true);
@@ -32,7 +31,7 @@ public class gurobi {
 
             solver.setMinim();
 
-            // Solver the problem
+            // LinearProblemSolver the problem
             solver.solve();
 
 

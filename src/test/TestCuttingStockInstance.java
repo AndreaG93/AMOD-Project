@@ -2,13 +2,14 @@
 
 import CuttingStock.CuttingStockInstance;
 import CuttingStock.CuttingStockResolver;
+import linearproblem.solver.implementations.LpSolveLinearProblemSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class TestCuttingStockInstance {
 
-    @Test
+
     void test() {
 
         CuttingStockInstance instance = new CuttingStockInstance(11.0);
@@ -21,8 +22,24 @@ class TestCuttingStockInstance {
 
         System.out.println(instance.getMaxItemLength());
 
-        CuttingStockResolver resolver = new CuttingStockResolver(instance);
-
+        CuttingStockResolver resolver = new CuttingStockResolver(instance, new LpSolveLinearProblemSolver());
+        resolver.solve();
 
     }
+
+    @Test
+    void test2() {
+
+        CuttingStockInstance instance = new CuttingStockInstance(218);
+
+        instance.addItems(44, 81);
+        instance.addItems(3, 70);
+        instance.addItems(48, 68);
+
+        CuttingStockResolver resolver = new CuttingStockResolver(instance, new LpSolveLinearProblemSolver());
+        resolver.solve();
+    }
+
+
+
 }

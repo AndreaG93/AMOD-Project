@@ -9,6 +9,7 @@ public class CuttingStockInstance {
 
     public CuttingStockInstance(double maxItemLength) {
         this.maxItemLength = maxItemLength;
+        this.items = new ArrayList<>();
     }
 
     public void addItems(double amount, double length) {
@@ -26,4 +27,6 @@ public class CuttingStockInstance {
     public ArrayList<CuttingStockItem> getItems() {
         return items;
     }
+
+
 }

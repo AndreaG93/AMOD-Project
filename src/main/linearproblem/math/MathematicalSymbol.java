@@ -1,11 +1,13 @@
 package linearproblem.math;
 
+import gurobi.GRB;
 import lpsolve.LpSolve;
 
 public enum MathematicalSymbol {
 
     EQ, GEQ, LEQ;
 
+    public char toGurobiRepresentation;
     private String latexMarkupString;
     private int lpSolveIndex;
 
@@ -17,6 +19,10 @@ public enum MathematicalSymbol {
         EQ.lpSolveIndex = LpSolve.EQ;
         LEQ.lpSolveIndex = LpSolve.LE;
         GEQ.lpSolveIndex = LpSolve.GE;
+
+        EQ.toGurobiRepresentation = GRB.LESS_EQUAL;
+
+
     }
 
     public String getLatexMarkupString() {
@@ -25,5 +31,9 @@ public enum MathematicalSymbol {
 
     public int getLpSolveIndex(){
         return this.lpSolveIndex;
+    }
+
+    public char getGurobiRepresentation(){
+        return this.toGurobiRepresentation;
     }
 }

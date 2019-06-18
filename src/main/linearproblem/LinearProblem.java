@@ -24,9 +24,11 @@ public class LinearProblem {
     private Vector b;
     private Matrix A;
     private ArrayList<MathematicalSymbol> constraintInequalitySymbols;
+    private boolean areIntegerVariables;
 
-    public LinearProblem(LinearProblemType type, int initialNumberOfVariables, int initialNumberOfConstrains) {
+    public LinearProblem(LinearProblemType type, boolean areVariablesBinary, int initialNumberOfVariables, int initialNumberOfConstrains) {
         this.type = type;
+        this.areIntegerVariables = areVariablesBinary;
 
         this.c = new Vector(initialNumberOfVariables);
         this.b = new Vector(initialNumberOfConstrains);
@@ -51,6 +53,12 @@ public class LinearProblem {
 
     public void setMathematicalSymbolOfSpecifiedConstraint(int constraintIndex, MathematicalSymbol value) {
         this.constraintInequalitySymbols.set(constraintIndex, value);
+    }
+
+    public void setObjectiveFunctionCoefficient(double[] coefficient){
+
+        for (int index = 0; index < coefficient.length; index++)
+            this.c.setValue(index, coefficient[index]);
     }
 
     public double[] getCoefficientOfObjectiveFunction() {
@@ -82,6 +90,13 @@ public class LinearProblem {
         return type;
     }
 
+    public boolean isAreIntegerVariables() {
+        return areIntegerVariables;
+    }
+
+    public void setAreIntegerVariables(boolean areIntegerVariables) {
+        this.areIntegerVariables = areIntegerVariables;
+    }
 
     /***** */
 
@@ -125,7 +140,7 @@ public class LinearProblem {
             else
                 latexOutput.append(" & ");
 
-            latexOutput.append(String.format(Locale.US, " $\\geq$ & $%.2f$ \\\\\n", this.b.getValue(rowIndex)));
+            latexOutput.append(String.format(Locale.US, " %s & $%.2f$ \\\\\n", this.constraintInequalitySymbols.get(rowIndex).getLatexMarkupString(), this.b.getValue(rowIndex)));
         }
 
         latexOutput.append("\\end{tabular}\n\\end{document}\n");

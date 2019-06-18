@@ -1,11 +1,12 @@
 import linearproblem.math.Matrix;
 import org.junit.jupiter.api.Test;
-import java.util.Vector;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+
 
 class TestMatrix {
 
-    @Test
+
     void test() {
 
         Matrix matrix = new Matrix(3,3);
@@ -21,10 +22,28 @@ class TestMatrix {
         matrix.setValue(2,2, 41.0);
 
         matrix.print();
+    }
 
-        Vector<Double> row = matrix.getRow(2);
-        assertEquals(48, row.get(0));
-        assertEquals(49, row.get(1));
-        assertEquals(41, row.get(2));
+
+    @Test
+    void test2() {
+
+        ArrayList<Double> dd = new ArrayList<>();
+        dd.add(3.0);
+        dd.add(6.0);
+        dd.add(10.0);
+
+        for (Double value : dd){
+            System.out.println(value);
+        }
+
+        Double[] array = new Double[dd.size()];
+
+        array = dd.toArray(array);
+
+
+        for (int i = 0; i < array.length; i++){
+            System.out.println(array[i]);
+        }
     }
 }
