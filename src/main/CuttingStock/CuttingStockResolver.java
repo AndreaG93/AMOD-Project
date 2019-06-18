@@ -11,8 +11,12 @@ import linearproblem.utility.VariableType;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class CuttingStockResolver {
+
+    private CuttingStockInstance instance;
 
     private LinearProblem masterProblem;
     private LinearProblem columnCutPatternProblem;
@@ -20,6 +24,9 @@ public class CuttingStockResolver {
 
 
     public CuttingStockResolver(CuttingStockInstance instance) {
+
+        this.instance = instance;
+
         buildMasterProblem(instance);
         buildKnapsackSubProblem(instance);
     }
@@ -47,8 +54,8 @@ public class CuttingStockResolver {
             for (CuttingStockItem item : instance.getItems()) {
 
                 double[] constraintCoefficient = new double[numberOfVariables];
-                //constraintCoefficient[index] = ((int) (maxItemLength / item.getLength()));
-                constraintCoefficient[index] = 1;
+                constraintCoefficient[index] = ((int) (maxItemLength / item.getLength()));
+                //constraintCoefficient[index] = 1;
 
 
                 this.masterProblem.addConstraint(constraintCoefficient, MathematicalSymbol.GREATER_EQUAL, item.getAmount());
@@ -95,54 +102,80 @@ public class CuttingStockResolver {
 
     public void solve() {
 
-        LinearProblemSolution solution = null;
+        LinearProblemSolution masterProblemsolution = null;
+        LinearProblemSolution knapsackSolution = null;
 
         for (int iteration = 0; ; iteration++) {
 
             try {
 
-                this.masterProblem.writeToLPFile("MasterProblem" + iteration);
-                solution = this.masterProblem.getSolution();
-                solution.print();
+                System.out.println("-----" + iteration);
+
+                //this.masterProblem.writeToLPFile("MasterProblem" + iteration);
+                masterProblemsolution = this.masterProblem.getSolution();
+                //masterProblemsolution.print();
 
                 double[] multiplier = this.masterProblem.getDualSolution();
 
                 this.knapsackSubProblem.addObjectiveFunction(multiplier, LinearProblemType.max);
-                this.knapsackSubProblem.writeToLPFile("Knapsack" + iteration);
-                solution = this.knapsackSubProblem.getSolution();
+                //this.knapsackSubProblem.writeToLPFile("Knapsack" + iteration);
+                knapsackSolution = this.knapsackSubProblem.getSolution();
 
-                if (1 - solution.getValueObjectiveFunction() < 0){
+                if (1 - knapsackSolution.getValueObjectiveFunction() < 0){
 
-                    double[] newColumn = solution.getSolutions();
+                    double[] newColumn = knapsackSolution.getSolutions();
                     this.masterProblem.addNewColumn(0.0, GRB.INFINITY, 1.0, VariableType.REAL, newColumn);
 
                 } else {
-                    return;
+                    break;
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(1);
             }
-            /*
-            this.masterProblem.printAsLatexString();
+        }
 
 
-            LinearProblemSolution primarySolution = this.linearProblemSolver.solve(this.masterProblem);
-            LinearProblemSolution dualSolution = this.linearProblemSolver.solveDual(this.masterProblem);
+        try {
 
-            System.out.println(dualSolution);
+            CuttingStockSolution cuttingStockSolution = new CuttingStockSolution();
+            double[] pppp = masterProblemsolution.getSolutions();
 
-            double[] multiplier = {1,1,1};
+            for (int i = 0; i < pppp.length; i++){
 
-            this.knapsackSubProblem.setObjectiveFunctionCoefficient(multiplier);
-            this.knapsackSubProblem.printAsLatexString();
+                int amount = (int) pppp[i];
+                if (amount == 0)
+                    continue;
 
-            LinearProblemSolution knapsackSubProblemSolution = this.linearProblemSolver.solve(this.knapsackSubProblem);
+                double[] column = this.masterProblem.getColumnCoefficient(i);
+                ArrayList<Double> patternddd = new ArrayList<>();
 
-            System.out.println(knapsackSubProblemSolution);
-            */
+                for (int j = 0; j < column.length; j++){
+                    while (column[j] > 0){
+                        patternddd.add(this.instance.getItems().get(j).getLength());
+                        column[j]--;
+                    }
+                }
 
+                double[] patternrrr = new double[patternddd.size()];
+                for (int r = 0; r < patternrrr.length; r++){
+                    patternrrr[r] = patternddd.get(r);
+                }
+
+                cuttingStockSolution.addPattern(new CuttingStockPattern(amount, patternrrr));
+
+            }
+
+            cuttingStockSolution.print();
+
+
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

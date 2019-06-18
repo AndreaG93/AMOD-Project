@@ -113,12 +113,25 @@ public class GurobiLinearProblem extends LinearProblem {
         for (int index = 0; index < variables.length; index++)
             solution[index] = variables[index].get(GRB.DoubleAttr.X);
 
-        //getDualSolution();
+
         return new LinearProblemSolution(solution, this.linearProblem.get(GRB.DoubleAttr.ObjVal));
     }
 
     @Override
-    public void writeToLPFile(String name) throws Exception{
+    public double[] getColumnCoefficient(int index) throws Exception {
+
+        GRBConstr[] constrains = this.linearProblem.getConstrs();
+        double[] output = new double[constrains.length];
+
+        for (int i = 0; i < constrains.length; i++)
+            output[i] = this.linearProblem.getCoeff(constrains[i], this.linearProblem.getVar(index));
+
+        return output;
+    }
+
+
+    @Override
+    public void writeToLPFile(String name) throws Exception {
         this.linearProblem.write(name + ".lp");
     }
 }

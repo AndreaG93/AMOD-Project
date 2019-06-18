@@ -26,7 +26,7 @@ class TestCuttingStockInstance {
 
     }
 
-    @Test
+
     void test2() {
 
         CuttingStockInstance instance = new CuttingStockInstance(218);
@@ -38,6 +38,35 @@ class TestCuttingStockInstance {
         CuttingStockResolver resolver = new CuttingStockResolver(instance);
         resolver.solve();
     }
+
+    @Test
+    void test3() {
+
+        CuttingStockInstance instance = new CuttingStockInstance(5600);
+
+        instance.addItems(22, 1380);
+        instance.addItems(25, 1520);
+        instance.addItems(12, 1560);
+
+        instance.addItems(14, 1710);
+        instance.addItems(18, 1820);
+        instance.addItems(18, 1880);
+
+        instance.addItems(20, 1930);
+        instance.addItems(10, 2000);
+        instance.addItems(12, 2050);
+
+        instance.addItems(14, 2100);
+        instance.addItems(16, 2140);
+        instance.addItems(18, 2150);
+
+        instance.addItems(20, 2200);
+
+        CuttingStockResolver resolver = new CuttingStockResolver(instance);
+        resolver.solve();
+    }
+
+
 
 
 
