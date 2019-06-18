@@ -27,6 +27,4 @@ public class CuttingStockInstance {
     public ArrayList<CuttingStockItem> getItems() {
         return items;
     }
-
-
 }

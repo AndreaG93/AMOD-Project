@@ -20,18 +20,9 @@ public class LinearProblemSolution {
         return valueObjectiveFunction;
     }
 
-    @Override
-    public String toString() {
+    public void print() {
 
-        StringBuilder output = new StringBuilder();
-
-
-        output.append("sol = [");
-        for (double value : this.solutions)
-            output.append(String.format(Locale.US, " %f ", value));
-        output.append("]\n");
-        output.append(String.format(Locale.US, "Value of Objective Function: %f \n", this.valueObjectiveFunction));
-
-        return output.toString();
+        for (int i = 0; i < this.solutions.length; i++)
+            System.out.println(String.format(Locale.US, "x_%d = %f", i+1, this.solutions[i]));
     }
 }

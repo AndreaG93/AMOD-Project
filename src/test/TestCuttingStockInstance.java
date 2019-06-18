@@ -2,7 +2,6 @@
 
 import CuttingStock.CuttingStockInstance;
 import CuttingStock.CuttingStockResolver;
-import linearproblem.solver.implementations.LpSolveLinearProblemSolver;
 import org.junit.jupiter.api.Test;
 
 
@@ -22,7 +21,7 @@ class TestCuttingStockInstance {
 
         System.out.println(instance.getMaxItemLength());
 
-        CuttingStockResolver resolver = new CuttingStockResolver(instance, new LpSolveLinearProblemSolver());
+        CuttingStockResolver resolver = new CuttingStockResolver(instance);
         resolver.solve();
 
     }
@@ -36,7 +35,7 @@ class TestCuttingStockInstance {
         instance.addItems(3, 70);
         instance.addItems(48, 68);
 
-        CuttingStockResolver resolver = new CuttingStockResolver(instance, new LpSolveLinearProblemSolver());
+        CuttingStockResolver resolver = new CuttingStockResolver(instance);
         resolver.solve();
     }
 
