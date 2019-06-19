@@ -11,16 +11,23 @@ public class GurobiLinearProblem extends LinearProblem {
 
     private GRBModel linearProblem;
 
-    @Override
-    public void modelInitialization() throws Exception {
+    public GurobiLinearProblem(){
 
-        GRBEnv env = new GRBEnv(true);
 
-        env.start();
+        GRBEnv env = null;
+        try {
+            env = new GRBEnv(true);
 
-        this.linearProblem = new GRBModel(env);
-        //this.linearProblem.set(GRB.DoubleParam.TimeLimit, 100.0);
-        this.linearProblem.set(GRB.IntParam.OutputFlag, 0);
+            env.start();
+
+            this.linearProblem = new GRBModel(env);
+            //this.linearProblem.set(GRB.DoubleParam.TimeLimit, 100.0);
+            this.linearProblem.set(GRB.IntParam.OutputFlag, 0);
+        } catch (GRBException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -43,13 +50,30 @@ public class GurobiLinearProblem extends LinearProblem {
     }
 
     @Override
-    public void addObjectiveFunction(double[] coefficients, LinearProblemType type) throws Exception {
+    public void setObjectiveFunction(double[] coefficients, LinearProblemType type) throws Exception {
 
         GRBLinExpr objectiveFunction = new GRBLinExpr();
 
         objectiveFunction.addTerms(coefficients, this.linearProblem.getVars());
         this.linearProblem.setObjective(objectiveFunction, (type == LinearProblemType.min) ? GRB.MINIMIZE : GRB.MAXIMIZE);
 
+        this.linearProblem.update();
+    }
+
+    @Override
+    public void setObjectiveFunctionType(LinearProblemType type) throws Exception {
+        this.linearProblem.set(GRB.IntAttr.ModelSense, (type == LinearProblemType.min) ? GRB.MINIMIZE : GRB.MAXIMIZE);
+    }
+
+
+    @Override
+    public void changeObjectiveFunctionCoefficients(double[] newCoefficients) throws Exception{
+
+        GRBLinExpr objectiveFunction = new GRBLinExpr();
+
+        objectiveFunction.addTerms(newCoefficients, this.linearProblem.getVars());
+
+        this.linearProblem.setObjective(objectiveFunction);
         this.linearProblem.update();
     }
 
@@ -77,17 +101,6 @@ public class GurobiLinearProblem extends LinearProblem {
         return output;
     }
 
-    @Override
-    public double[] getDualSolution() throws Exception {
-
-        GRBConstr[] constrains = this.linearProblem.getConstrs();
-        double[] output = new double[constrains.length];
-
-        for (int i = 0; i < constrains.length; i++)
-            output[i] = constrains[i].get(GRB.DoubleAttr.Pi);
-
-        return output;
-    }
 
     @Override
     public void addNewColumn(double newVariableLowerBound, double newVariableUpperBound, double value, VariableType varType, double[] columnCoefficient) throws Exception {
@@ -103,19 +116,55 @@ public class GurobiLinearProblem extends LinearProblem {
     }
 
     @Override
-    public LinearProblemSolution getSolution() throws Exception {
-
-        this.linearProblem.optimize();
-
-        GRBVar[] variables = this.linearProblem.getVars();
-        double[] solution = new double[variables.length];
-
-        for (int index = 0; index < variables.length; index++)
-            solution[index] = variables[index].get(GRB.DoubleAttr.X);
+    public LinearProblemSolution getDualSolution() {
 
 
-        return new LinearProblemSolution(solution, this.linearProblem.get(GRB.DoubleAttr.ObjVal));
+
+        GRBConstr[] constrains = this.linearProblem.getConstrs();
+        double[] output = new double[constrains.length];
+
+        try {
+
+
+            for (int i = 0; i < constrains.length; i++) {
+                output[i] = constrains[i].get(GRB.DoubleAttr.Pi);
+            }
+
+
+
+
+
+        } catch (GRBException e) {
+            e.printStackTrace();
+        }
+        return new LinearProblemSolution(output, 0);
     }
+
+    @Override
+    public LinearProblemSolution getSolution() {
+
+        try {
+            this.linearProblem.optimize();
+
+            GRBVar[] variables = this.linearProblem.getVars();
+            double[] solution = new double[variables.length];
+
+            for (int index = 0; index < variables.length; index++)
+                solution[index] = variables[index].get(GRB.DoubleAttr.X);
+
+            /*
+            if (this.linearProblem.get(GRB.IntAttr.Status) == GRB.OPTIMAL){
+                this.linearProblem.get(GRB.DoubleAttr.X);
+            }
+*/
+
+            return new LinearProblemSolution(solution, this.linearProblem.get(GRB.DoubleAttr.ObjVal));
+        } catch (GRBException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @Override
     public double[] getColumnCoefficient(int index) throws Exception {

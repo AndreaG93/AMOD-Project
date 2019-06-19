@@ -1,6 +1,5 @@
 package CuttingStock;
 
-
 import gurobi.GRB;
 import linearproblem.LinearProblem;
 import linearproblem.LinearProblemSolution;
@@ -9,140 +8,110 @@ import linearproblem.gurobi.GurobiLinearProblem;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
 
-
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public class CuttingStockResolver {
 
-    private CuttingStockInstance instance;
-
+    private final CuttingStockInstance instance;
     private LinearProblem masterProblem;
-    private LinearProblem columnCutPatternProblem;
     private LinearProblem knapsackSubProblem;
-
+    private LinearProblemSolution masterProblemSolution;
+    private int totalNumberOfColumnsAdded;
 
     public CuttingStockResolver(CuttingStockInstance instance) {
 
         this.instance = instance;
 
-        buildMasterProblem(instance);
-        buildKnapsackSubProblem(instance);
-    }
-
-
-    private void buildMasterProblem(CuttingStockInstance instance) {
-
-        double maxItemLength = instance.getMaxItemLength();
-        int numberOfVariables = instance.getNumberOfItems();
         this.masterProblem = new GurobiLinearProblem();
-
-        try {
-
-            double[] coefficientObjectiveFunction = new double[numberOfVariables];
-
-            this.masterProblem.modelInitialization();
-            this.masterProblem.setVariables(numberOfVariables, 0, GRB.INFINITY, VariableType.REAL);
-
-            for (int index = 0; index < numberOfVariables; index++)
-                coefficientObjectiveFunction[index] = 1;
-
-            this.masterProblem.addObjectiveFunction(coefficientObjectiveFunction, LinearProblemType.min);
-
-            int index = 0;
-            for (CuttingStockItem item : instance.getItems()) {
-
-                double[] constraintCoefficient = new double[numberOfVariables];
-                constraintCoefficient[index] = ((int) (maxItemLength / item.getLength()));
-                //constraintCoefficient[index] = 1;
-
-
-                this.masterProblem.addConstraint(constraintCoefficient, MathematicalSymbol.GREATER_EQUAL, item.getAmount());
-                index++;
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildKnapsackSubProblem(CuttingStockInstance instance) {
-
         this.knapsackSubProblem = new GurobiLinearProblem();
-        ArrayList<CuttingStockItem> items = instance.getItems();
-        int numberOfVariables = items.size();
+    }
 
-        try {
+    public void solve() throws Exception {
 
-            double[] coefficientObjectiveFunction = new double[numberOfVariables];
+        buildMasterProblem();
+        buildKnapsackSubProblem();
+        executeColumnGenerationAlgorithm();
+    }
 
-            this.knapsackSubProblem.modelInitialization();
-            this.knapsackSubProblem.setVariables(numberOfVariables, 0.0, GRB.INFINITY, VariableType.INTEGER);
+    public int getTotalNumberOfColumnsAdded() {
+        return totalNumberOfColumnsAdded;
+    }
 
-            this.knapsackSubProblem.addObjectiveFunction(null, LinearProblemType.max);
+    private void executeColumnGenerationAlgorithm() throws Exception {
 
-            int index = 0;
-            double[] constraintCoefficient = new double[numberOfVariables];
-            for (CuttingStockItem item : instance.getItems()) {
-                constraintCoefficient[index] = item.getLength();
-                index++;
-            }
+        LinearProblemSolution masterProblemDualSolution;
+        LinearProblemSolution knapsackSubProblemSolution;
 
-            this.knapsackSubProblem.addConstraint(constraintCoefficient, MathematicalSymbol.LESS_EQUAL, instance.getMaxItemLength());
+        while (true) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            this.masterProblemSolution = this.masterProblem.getSolution();
+            masterProblemDualSolution = this.masterProblem.getDualSolution();
+
+            this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
+            knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
+
+            if (1 - knapsackSubProblemSolution.getValueObjectiveFunction() < 0) {
+
+                double[] newColumn = knapsackSubProblemSolution.getSolutions();
+
+                this.masterProblem.addNewColumn(0.0, GRB.INFINITY, 1.0, VariableType.REAL, newColumn);
+                this.totalNumberOfColumnsAdded = this.totalNumberOfColumnsAdded + 1;
+
+            } else
+                break;
         }
     }
 
+    private void buildMasterProblem() throws Exception {
 
+        ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
+        double maxItemLength = instance.getMaxItemLength();
+        int numberOfVariables = cuttingStockItems.size();
 
+        double[] coefficientObjectiveFunction = new double[numberOfVariables];
 
-    public void solve() {
+        this.masterProblem.setVariables(numberOfVariables, 0, GRB.INFINITY, VariableType.REAL);
 
-        LinearProblemSolution masterProblemsolution = null;
-        LinearProblemSolution knapsackSolution = null;
+        Arrays.fill(coefficientObjectiveFunction, 1);
 
-        for (int iteration = 0; ; iteration++) {
+        this.masterProblem.setObjectiveFunction(coefficientObjectiveFunction, LinearProblemType.min);
 
-            try {
+        for (int index = 0; index < numberOfVariables; index++) {
 
-                System.out.println("-----" + iteration);
+            CuttingStockItem currentItem = cuttingStockItems.get(index);
 
-                //this.masterProblem.writeToLPFile("MasterProblem" + iteration);
-                masterProblemsolution = this.masterProblem.getSolution();
-                //masterProblemsolution.print();
+            double[] constraintCoefficients = new double[numberOfVariables];
 
-                double[] multiplier = this.masterProblem.getDualSolution();
-
-                this.knapsackSubProblem.addObjectiveFunction(multiplier, LinearProblemType.max);
-                //this.knapsackSubProblem.writeToLPFile("Knapsack" + iteration);
-                knapsackSolution = this.knapsackSubProblem.getSolution();
-
-                if (1 - knapsackSolution.getValueObjectiveFunction() < 0){
-
-                    double[] newColumn = knapsackSolution.getSolutions();
-                    this.masterProblem.addNewColumn(0.0, GRB.INFINITY, 1.0, VariableType.REAL, newColumn);
-
-                } else {
-                    break;
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(1);
-            }
+            constraintCoefficients[index] = ((int) (maxItemLength / currentItem.getLength()));
+            this.masterProblem.addConstraint(constraintCoefficients, MathematicalSymbol.GREATER_EQUAL, currentItem.getAmount());
         }
+    }
 
+    private void buildKnapsackSubProblem() throws Exception {
+
+        ArrayList<CuttingStockItem> items = instance.getItems();
+
+        this.knapsackSubProblem.setVariables(items.size(), 0.0, GRB.INFINITY, VariableType.INTEGER);
+        this.knapsackSubProblem.setObjectiveFunctionType(LinearProblemType.max);
+
+        double[] constraintCoefficient = new double[items.size()];
+
+        for (int index = 0; index < items.size(); index++)
+            constraintCoefficient[index] = items.get(index).getLength();
+
+        this.knapsackSubProblem.addConstraint(constraintCoefficient, MathematicalSymbol.LESS_EQUAL, instance.getMaxItemLength());
+    }
+
+
+    public void printSolution() {
 
         try {
-
+            double[] pppp = this.masterProblemSolution.getSolutions();
             CuttingStockSolution cuttingStockSolution = new CuttingStockSolution();
-            double[] pppp = masterProblemsolution.getSolutions();
 
-            for (int i = 0; i < pppp.length; i++){
+            for (int i = 0; i < pppp.length; i++) {
 
                 int amount = (int) pppp[i];
                 if (amount == 0)
@@ -151,15 +120,15 @@ public class CuttingStockResolver {
                 double[] column = this.masterProblem.getColumnCoefficient(i);
                 ArrayList<Double> patternddd = new ArrayList<>();
 
-                for (int j = 0; j < column.length; j++){
-                    while (column[j] > 0){
+                for (int j = 0; j < column.length; j++) {
+                    while (column[j] > 0) {
                         patternddd.add(this.instance.getItems().get(j).getLength());
                         column[j]--;
                     }
                 }
 
                 double[] patternrrr = new double[patternddd.size()];
-                for (int r = 0; r < patternrrr.length; r++){
+                for (int r = 0; r < patternrrr.length; r++) {
                     patternrrr[r] = patternddd.get(r);
                 }
 
@@ -168,10 +137,6 @@ public class CuttingStockResolver {
             }
 
             cuttingStockSolution.print();
-
-
-
-
 
 
         } catch (Exception e) {

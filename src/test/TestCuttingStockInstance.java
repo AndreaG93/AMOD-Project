@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class TestCuttingStockInstance {
 
-
+    @Test
     void test() {
 
         CuttingStockInstance instance = new CuttingStockInstance(11.0);
@@ -19,10 +19,15 @@ class TestCuttingStockInstance {
         instance.addItems(10, 5.5);
         instance.addItems(8, 7.5);
 
-        System.out.println(instance.getMaxItemLength());
-
         CuttingStockResolver resolver = new CuttingStockResolver(instance);
-        resolver.solve();
+        try {
+            resolver.solve();
+            resolver.printSolution();
+
+            System.out.println(resolver.getTotalNumberOfColumnsAdded());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -36,11 +41,39 @@ class TestCuttingStockInstance {
         instance.addItems(48, 68);
 
         CuttingStockResolver resolver = new CuttingStockResolver(instance);
-        resolver.solve();
+        try {
+            resolver.solve();
+            resolver.printSolution();
+
+            System.out.println(resolver.getTotalNumberOfColumnsAdded());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Test
+
     void test3() {
+
+        CuttingStockInstance instance = new CuttingStockInstance(5);
+
+        instance.addItems(1, 5);
+        instance.addItems(3, 3);
+        instance.addItems(3, 2);
+
+        CuttingStockResolver resolver = new CuttingStockResolver(instance);
+        try {
+            resolver.solve();
+            resolver.printSolution();
+
+            System.out.println(resolver.getTotalNumberOfColumnsAdded());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    void test4() {
 
         CuttingStockInstance instance = new CuttingStockInstance(5600);
 
@@ -63,7 +96,7 @@ class TestCuttingStockInstance {
         instance.addItems(20, 2200);
 
         CuttingStockResolver resolver = new CuttingStockResolver(instance);
-        resolver.solve();
+        //resolver.solve();
     }
 
 
