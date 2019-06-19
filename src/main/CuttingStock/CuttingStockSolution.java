@@ -2,32 +2,32 @@ package CuttingStock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CuttingStockSolution {
 
-    private ArrayList<CuttingStockPattern> patterns;
+    Map<Integer, CuttingStockPattern> solutions;
 
-    public CuttingStockSolution(){
-        this.patterns = new ArrayList<>();
+    CuttingStockSolution(){
+        this.solutions = new HashMap<>();
     }
 
-    public void addPattern(CuttingStockPattern input){
-        this.patterns.add(input);
+    void addNewPattern(int index, int patternCardinality) {
+        this.solutions.put(index, new CuttingStockPattern(patternCardinality));
+    }
+
+    void addCuttingLengthToPattern(int index, double length) {
+
+        CuttingStockPattern pattern = this.solutions.get(index);
+        pattern.putCuttingLength(length);
     }
 
     public void print(){
 
-        for (CuttingStockPattern pattern : this.patterns){
-
-            double total = 0;
-            for (int i = 0; i < pattern.getPattern().length; i++){
-                total = total + pattern.getPattern()[i];
-            }
-
-            String output = String.format(" %d x %s - total: %f ", pattern.getAmount(), Arrays.toString(pattern.getPattern()),total);
-            System.out.println(output);
-
+        for (Map.Entry<Integer, CuttingStockPattern> pair : solutions.entrySet()) {
+            pair.getValue().print();
         }
     }
 }

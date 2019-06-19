@@ -7,25 +7,27 @@ import linearproblem.LinearProblemType;
 import linearproblem.gurobi.GurobiLinearProblem;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CuttingStockResolver {
+public class CuttingStockProblem {
 
     private final CuttingStockInstance instance;
+
     private LinearProblem masterProblem;
     private LinearProblem knapsackSubProblem;
     private LinearProblemSolution masterProblemSolution;
-    private int totalNumberOfColumnsAdded;
 
-    public CuttingStockResolver(CuttingStockInstance instance) {
+    private int totalNumberOfColumnsAdded;
+    private CuttingStockSolution cuttingStockSolution;
+
+    public CuttingStockProblem(CuttingStockInstance instance) {
 
         this.instance = instance;
 
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
+        this.cuttingStockSolution = new CuttingStockSolution();
     }
 
     public void solve() throws Exception {
@@ -33,10 +35,42 @@ public class CuttingStockResolver {
         buildMasterProblem();
         buildKnapsackSubProblem();
         executeColumnGenerationAlgorithm();
+        buildSolution();
     }
 
     public int getTotalNumberOfColumnsAdded() {
         return totalNumberOfColumnsAdded;
+    }
+
+    public CuttingStockSolution getCuttingStockSolution() {
+        return cuttingStockSolution;
+    }
+
+    private void buildSolution() throws Exception {
+
+        ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
+        double[] solutionArray = this.masterProblemSolution.getSolutions();
+
+        for (int index = 0; index < solutionArray.length; index++){
+
+            int patternCardinality = (int) solutionArray[index];
+
+            if (patternCardinality == 0)
+                continue;
+            else {
+                this.cuttingStockSolution.addNewPattern(index, patternCardinality);
+                double[] column = this.masterProblem.getColumnCoefficient(index);
+
+                for (int columnIndex = 0; columnIndex < column.length; columnIndex++) {
+                    while (column[columnIndex] > 0) {
+
+                        this.cuttingStockSolution.addCuttingLengthToPattern(index, cuttingStockItems.get(columnIndex).getLength());
+
+                        column[columnIndex]--;
+                    }
+                }
+            }
+        }
     }
 
     private void executeColumnGenerationAlgorithm() throws Exception {
@@ -60,7 +94,7 @@ public class CuttingStockResolver {
                 this.totalNumberOfColumnsAdded = this.totalNumberOfColumnsAdded + 1;
 
             } else
-                break;
+                return;
         }
     }
 
@@ -105,44 +139,7 @@ public class CuttingStockResolver {
     }
 
 
-    public void printSolution() {
 
-        try {
-            double[] pppp = this.masterProblemSolution.getSolutions();
-            CuttingStockSolution cuttingStockSolution = new CuttingStockSolution();
-
-            for (int i = 0; i < pppp.length; i++) {
-
-                int amount = (int) pppp[i];
-                if (amount == 0)
-                    continue;
-
-                double[] column = this.masterProblem.getColumnCoefficient(i);
-                ArrayList<Double> patternddd = new ArrayList<>();
-
-                for (int j = 0; j < column.length; j++) {
-                    while (column[j] > 0) {
-                        patternddd.add(this.instance.getItems().get(j).getLength());
-                        column[j]--;
-                    }
-                }
-
-                double[] patternrrr = new double[patternddd.size()];
-                for (int r = 0; r < patternrrr.length; r++) {
-                    patternrrr[r] = patternddd.get(r);
-                }
-
-                cuttingStockSolution.addPattern(new CuttingStockPattern(amount, patternrrr));
-
-            }
-
-            cuttingStockSolution.print();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }
