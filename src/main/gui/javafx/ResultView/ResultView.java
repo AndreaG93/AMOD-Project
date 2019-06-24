@@ -5,20 +5,25 @@ import CuttingStock.CuttingStockPattern;
 import CuttingStock.CuttingStockProblem;
 import CuttingStock.CuttingStockSolution;
 import gui.javafx.UserInterfaceJavaFX;
-import gurobi.GRB;
-import javafx.collections.FXCollections;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,16 +44,27 @@ public class ResultView extends UserInterfaceJavaFX {
     @FXML
     private VBox test;
 
+    @FXML
+    private StackedBarChart<String, Number> fx_problemGraphicSolution;
+
     private CuttingStockSolution solution;
 
     public ResultView() throws Exception {
         super();
 
-        CuttingStockInstance instance = new CuttingStockInstance(5);
+        //this.fx_problemGraphicSolution.getStylesheets().add(getClass().getResource("./f.css").toExternalForm());
 
-        instance.addItems(1, 5);
-        instance.addItems(3, 3);
-        instance.addItems(3, 2);
+        //this.fx_problemGraphicSolution.setStyle("-fx-border-color: rgba(0,16,35,0.5) rgba(0,68,55,0.6) transparent rgba(0,68,55,0.7);");
+        //this.fx_problemGraphicSolution.setStyle("-fx-category-gap: 100;");
+
+
+        CuttingStockInstance instance = new CuttingStockInstance(11.0);
+
+        instance.addItems(48, 2.0);
+        instance.addItems(35, 4.5);
+        instance.addItems(24, 5.0);
+        instance.addItems(10, 5.5);
+        instance.addItems(8, 7.5);
 
         CuttingStockProblem cuttingStockProblem = new CuttingStockProblem(instance);
         cuttingStockProblem.solve();
@@ -77,14 +93,7 @@ public class ResultView extends UserInterfaceJavaFX {
         this.stage.show();
     }
 
-    final static String austria = "Austria";
-    final static String brazil = "Brazil";
-    final static String france = "France";
-    final static String italy = "Italy";
-    final static String usa = "USA";
-
-
-    private void updateObjectiveFunctionValueGraphic(ArrayList<Double> objectiveFunctionValues){
+    private void updateObjectiveFunctionValueGraphic(ArrayList<Double> objectiveFunctionValues) {
 
         XYChart.Series series = new XYChart.Series();
 
@@ -98,52 +107,54 @@ public class ResultView extends UserInterfaceJavaFX {
     }
 
 
-    private void updateSolutions(Map<Integer, CuttingStockPattern> input){
-
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final StackedBarChart<String, Number> sbc =
-                new StackedBarChart<String, Number>(xAxis, yAxis);
-
-        this.test.getChildren().add(sbc);
-/*
-        for (Map.Entry<Integer, CuttingStockPattern> pair : input.entrySet()) {
-
-            for (Double value : pair.getValue().getCuttingLengths()){
-
-                XYChart.Series<String, Number> currentPatternSeries = new XYChart.Series<String, Number>();
-                currentPatternSeries.setName(String.valueOf(value));
-
-                String x = String.format("Pattern #%d - x%d", pair.getKey(), pair.getValue().getCardinality());
-                currentPatternSeries.getData().add(new XYChart.Data<String, Number>(x, value));
-
-                sbc.getData().add(currentPatternSeries);
-            }
-        }
-        */
+    private void updateSolutions(Map<Integer, CuttingStockPattern> input) {
 
         Map<Double, XYChart.Series<String, Number>> hashMapSeries = new HashMap<>();
 
         for (Map.Entry<Integer, CuttingStockPattern> pair : input.entrySet()) {
 
-            for (Double value : pair.getValue().getCuttingLengths()){
+            for (Double value : pair.getValue().getCuttingLengths()) {
 
                 XYChart.Series<String, Number> currentPatternSeries = hashMapSeries.get(value);
-                if (currentPatternSeries == null){
+                if (currentPatternSeries == null) {
                     currentPatternSeries = new XYChart.Series<String, Number>();
                     currentPatternSeries.setName(String.valueOf(value));
                     hashMapSeries.put(value, currentPatternSeries);
                 }
 
                 String x = String.format("Pattern #%d - x%d", pair.getKey(), pair.getValue().getCardinality());
-                currentPatternSeries.getData().add(new XYChart.Data<String, Number>(x, value));
+
+                final XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(x, value);
+                data.nodeProperty().addListener(new ChangeListener<Node>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Node> observableValue, Node node, Node t1) {
+
+                        data.getNode().setStyle("-fx-border-color: black; -fx-border-width: 3 3 3 3;");
+
+                    }
+                });
+
+                currentPatternSeries.getData().add(data);
+
+
             }
         }
 
+
         for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet()) {
-            sbc.getData().add(pair.getValue());
+
+            //pair.getValue().getChart().setStyle("-fx-border-color: black;");
+
+            fx_problemGraphicSolution.getData().add(pair.getValue());
+
+
         }
     }
+
+
+
+
+
 
 
     @Override

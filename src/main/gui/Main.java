@@ -1,6 +1,7 @@
 package gui;
 
 import gui.javafx.ResultView.ResultView;
+import gui.javafx.register_account.Result;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ public class Main extends Application {
     public void start(Stage arg0) throws Exception {
 
         try {
+            //new Result().showUserInterface();
             new ResultView().showUserInterface();
         } catch (Exception e) {
 
