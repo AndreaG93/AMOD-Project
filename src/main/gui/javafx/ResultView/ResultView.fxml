@@ -9,13 +9,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
@@ -45,19 +41,9 @@
                      </children>
                   </HBox>
                   <Separator />
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" />
-                      <ColumnConstraints hgrow="SOMETIMES" />
-                        <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                      <RowConstraints vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <HBox>
                      <children>
-                        <VBox fillWidth="false">
+                        <VBox fillWidth="false" prefWidth="150.0">
                            <children>
                               <Label text="Solution Value" textFill="#949090" />
                               <Label fx:id="fx_solutionValue" text="Label">
@@ -66,37 +52,24 @@
                                  </font>
                               </Label>
                            </children>
-                           <GridPane.margin>
+                           <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
+                           </HBox.margin>
                         </VBox>
-                        <VBox GridPane.rowIndex="2">
+                        <VBox prefWidth="150.0">
                            <children>
-                              <Label text="Total number of column added" textFill="#949090" />
-                              <Label fx:id="fx_totalColumnAdded" text="Label">
+                              <Label text="Columns added" textFill="#949090" />
+                              <Label fx:id="fx_columnsAdded" text="Label">
                                  <font>
                                     <Font name="Segoe UI" size="24.0" />
                                  </font>
                               </Label>
                            </children>
-                           <GridPane.margin>
+                           <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
+                           </HBox.margin>
                         </VBox>
-                        <VBox fillWidth="false" GridPane.columnIndex="1">
-                           <children>
-                              <Label text="different Pattern used" textFill="#949090" />
-                              <Label text="Label">
-                                 <font>
-                                    <Font name="Segoe UI" size="24.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </VBox>
-                        <VBox fillWidth="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <VBox fillWidth="false" prefWidth="150.0">
                            <children>
                               <Label text="Elapsed Time" textFill="#949090" />
                               <Label fx:id="fx_elapsedTime" text="Label">
@@ -105,15 +78,12 @@
                                  </font>
                               </Label>
                            </children>
-                           <GridPane.margin>
+                           <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
+                           </HBox.margin>
                         </VBox>
                      </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </GridPane>
+                  </HBox>
                </children>
             </VBox>
          </content>

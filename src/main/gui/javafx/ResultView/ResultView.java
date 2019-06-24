@@ -33,45 +33,53 @@ public class ResultView extends UserInterfaceJavaFX {
     private LineChart<Number, Number> fx_ObjectiveLineChart;
 
     @FXML
+    private StackedBarChart<String, Number> fx_problemGraphicSolution;
+
+    @FXML
     private Label fx_solutionValue;
 
     @FXML
-    private Label fx_totalColumnAdded;
+    private Label fx_columnsAdded;
 
     @FXML
     private Label fx_elapsedTime;
 
-    @FXML
-    private VBox test;
 
-    @FXML
-    private StackedBarChart<String, Number> fx_problemGraphicSolution;
 
     private CuttingStockSolution solution;
 
     public ResultView() throws Exception {
         super();
 
-        //this.fx_problemGraphicSolution.getStylesheets().add(getClass().getResource("./f.css").toExternalForm());
+        CuttingStockInstance instance = new CuttingStockInstance(5600);
 
-        //this.fx_problemGraphicSolution.setStyle("-fx-border-color: rgba(0,16,35,0.5) rgba(0,68,55,0.6) transparent rgba(0,68,55,0.7);");
-        //this.fx_problemGraphicSolution.setStyle("-fx-category-gap: 100;");
+        instance.addItems(22, 1380);
+        instance.addItems(25, 1520);
+        instance.addItems(12, 1560);
 
+        instance.addItems(14, 1710);
+        instance.addItems(18, 1820);
+        instance.addItems(18, 1880);
 
-        CuttingStockInstance instance = new CuttingStockInstance(11.0);
+        instance.addItems(20, 1930);
+        instance.addItems(10, 2000);
+        instance.addItems(12, 2050);
 
-        instance.addItems(48, 2.0);
-        instance.addItems(35, 4.5);
-        instance.addItems(24, 5.0);
-        instance.addItems(10, 5.5);
-        instance.addItems(8, 7.5);
+        instance.addItems(14, 2100);
+        instance.addItems(16, 2140);
+        instance.addItems(18, 2150);
+
+        instance.addItems(20, 2200);
 
         CuttingStockProblem cuttingStockProblem = new CuttingStockProblem(instance);
         cuttingStockProblem.solve();
 
         this.solution = cuttingStockProblem.getCuttingStockSolution();
 
-        this.fx_totalColumnAdded.setText(String.valueOf(cuttingStockProblem.getTotalNumberOfColumnsAdded()));
+        this.fx_columnsAdded.setText(String.valueOf(cuttingStockProblem.getTotalNumberOfColumnsAdded()));
+        this.fx_elapsedTime.setText(String.valueOf(cuttingStockProblem.getTimeElapsed()));
+        this.fx_solutionValue.setText(String.valueOf(cuttingStockProblem.getObjectiveFunctionValues().get(cuttingStockProblem.getObjectiveFunctionValues().size() - 1)));
+
 
         updateObjectiveFunctionValueGraphic(cuttingStockProblem.getObjectiveFunctionValues());
 

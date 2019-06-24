@@ -23,6 +23,8 @@ public class CuttingStockProblem {
     private CuttingStockSolution cuttingStockSolution;
     private ArrayList<Double> objectiveFunctionValues;
 
+    private long timeElapsed;
+
     public CuttingStockProblem(CuttingStockInstance instance) {
 
         this.instance = instance;
@@ -35,10 +37,18 @@ public class CuttingStockProblem {
 
     public void solve() throws Exception {
 
+
+
+
         buildMasterProblem();
         buildKnapsackSubProblem();
+        long start = System.currentTimeMillis();
         executeColumnGenerationAlgorithm();
+        long finish = System.currentTimeMillis();
         buildSolution();
+
+
+        this.timeElapsed = finish - start;
     }
 
     public int getTotalNumberOfColumnsAdded() {
@@ -143,5 +153,9 @@ public class CuttingStockProblem {
 
     public ArrayList<Double> getObjectiveFunctionValues() {
         return objectiveFunctionValues;
+    }
+
+    public long getTimeElapsed() {
+        return timeElapsed;
     }
 }
