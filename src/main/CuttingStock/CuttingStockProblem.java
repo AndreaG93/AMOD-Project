@@ -7,6 +7,7 @@ import linearproblem.LinearProblemType;
 import linearproblem.gurobi.GurobiLinearProblem;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,6 +21,7 @@ public class CuttingStockProblem {
 
     private int totalNumberOfColumnsAdded;
     private CuttingStockSolution cuttingStockSolution;
+    private ArrayList<Double> objectiveFunctionValues;
 
     public CuttingStockProblem(CuttingStockInstance instance) {
 
@@ -28,6 +30,7 @@ public class CuttingStockProblem {
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
         this.cuttingStockSolution = new CuttingStockSolution();
+        this.objectiveFunctionValues = new ArrayList<>();
     }
 
     public void solve() throws Exception {
@@ -51,13 +54,11 @@ public class CuttingStockProblem {
         ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
         double[] solutionArray = this.masterProblemSolution.getSolutions();
 
-        for (int index = 0; index < solutionArray.length; index++){
+        for (int index = 0; index < solutionArray.length; index++) {
 
             int patternCardinality = (int) solutionArray[index];
 
-            if (patternCardinality == 0)
-                continue;
-            else {
+            if (patternCardinality != 0) {
                 this.cuttingStockSolution.addNewPattern(index, patternCardinality);
                 double[] column = this.masterProblem.getColumnCoefficient(index);
 
@@ -82,6 +83,8 @@ public class CuttingStockProblem {
 
             this.masterProblemSolution = this.masterProblem.getSolution();
             masterProblemDualSolution = this.masterProblem.getDualSolution();
+
+            this.objectiveFunctionValues.add(this.masterProblemSolution.getValueObjectiveFunction());
 
             this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
@@ -138,8 +141,7 @@ public class CuttingStockProblem {
         this.knapsackSubProblem.addConstraint(constraintCoefficient, MathematicalSymbol.LESS_EQUAL, instance.getMaxItemLength());
     }
 
-
-
-
-
+    public ArrayList<Double> getObjectiveFunctionValues() {
+        return objectiveFunctionValues;
+    }
 }

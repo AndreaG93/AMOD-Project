@@ -24,6 +24,10 @@ public class CuttingStockSolution {
         pattern.putCuttingLength(length);
     }
 
+    public Map<Integer, CuttingStockPattern> getSolutions() {
+        return solutions;
+    }
+
     public void print(){
 
         for (Map.Entry<Integer, CuttingStockPattern> pair : solutions.entrySet()) {

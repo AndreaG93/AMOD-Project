@@ -5,11 +5,22 @@ import CuttingStock.CuttingStockProblem;
 import org.junit.jupiter.api.Test;
 
 
-
 class TestCuttingStockInstance {
 
+    private void resolveCuttingStockProblem(CuttingStockProblem cuttingStockProblem) {
 
-    void test() {
+        try {
+            cuttingStockProblem.solve();
+            cuttingStockProblem.getCuttingStockSolution().print();
+
+            System.out.println(cuttingStockProblem.getTotalNumberOfColumnsAdded());
+            System.out.println(cuttingStockProblem.getObjectiveFunctionValues());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void test1() {
 
         CuttingStockInstance instance = new CuttingStockInstance(11.0);
 
@@ -19,16 +30,7 @@ class TestCuttingStockInstance {
         instance.addItems(10, 5.5);
         instance.addItems(8, 7.5);
 
-        CuttingStockProblem resolver = new CuttingStockProblem(instance);
-        try {
-            resolver.solve();
-            resolver.getCuttingStockSolution().print();
-
-            System.out.println(resolver.getTotalNumberOfColumnsAdded());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        resolveCuttingStockProblem(new CuttingStockProblem(instance));
     }
 
 
@@ -40,14 +42,7 @@ class TestCuttingStockInstance {
         instance.addItems(3, 70);
         instance.addItems(48, 68);
 
-        CuttingStockProblem resolver = new CuttingStockProblem(instance);
-        try {
-            resolver.solve();
-
-            System.out.println(resolver.getTotalNumberOfColumnsAdded());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        resolveCuttingStockProblem(new CuttingStockProblem(instance));
     }
 
 
@@ -59,20 +54,15 @@ class TestCuttingStockInstance {
         instance.addItems(3, 3);
         instance.addItems(3, 2);
 
-        CuttingStockProblem resolver = new CuttingStockProblem(instance);
-        try {
-            resolver.solve();
-
-
-            System.out.println(resolver.getTotalNumberOfColumnsAdded());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        resolveCuttingStockProblem(new CuttingStockProblem(instance));
     }
+
 
 
     @Test
     void test4() {
+
+
 
         CuttingStockInstance instance = new CuttingStockInstance(5600);
 
@@ -94,19 +84,7 @@ class TestCuttingStockInstance {
 
         instance.addItems(20, 2200);
 
-        CuttingStockProblem resolver = new CuttingStockProblem(instance);
-        try {
-            resolver.solve();
-            resolver.getCuttingStockSolution().print();
+        resolveCuttingStockProblem(new CuttingStockProblem(instance));
 
-            System.out.println(resolver.getTotalNumberOfColumnsAdded());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
-
-
-
-
-
 }
