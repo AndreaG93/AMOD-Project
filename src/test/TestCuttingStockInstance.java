@@ -12,9 +12,6 @@ class TestCuttingStockInstance {
         try {
             cuttingStockProblem.solve();
             cuttingStockProblem.getCuttingStockSolution().print();
-
-            System.out.println(cuttingStockProblem.getTotalNumberOfColumnsAdded());
-            System.out.println(cuttingStockProblem.getObjectiveFunctionValues());
         } catch (Exception e) {
             e.printStackTrace();
         }

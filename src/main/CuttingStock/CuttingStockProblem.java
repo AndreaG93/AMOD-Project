@@ -19,11 +19,8 @@ public class CuttingStockProblem {
     private LinearProblem knapsackSubProblem;
     private LinearProblemSolution masterProblemSolution;
 
-    private int totalNumberOfColumnsAdded;
-    private CuttingStockSolution cuttingStockSolution;
-    private ArrayList<Double> objectiveFunctionValues;
 
-    private long timeElapsed;
+    private CuttingStockSolution cuttingStockSolution;
 
     public CuttingStockProblem(CuttingStockInstance instance) {
 
@@ -32,7 +29,6 @@ public class CuttingStockProblem {
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
         this.cuttingStockSolution = new CuttingStockSolution();
-        this.objectiveFunctionValues = new ArrayList<>();
     }
 
     public void solve() throws Exception {
@@ -48,11 +44,7 @@ public class CuttingStockProblem {
         buildSolution();
 
 
-        this.timeElapsed = finish - start;
-    }
-
-    public int getTotalNumberOfColumnsAdded() {
-        return totalNumberOfColumnsAdded;
+        this.cuttingStockSolution.setTimeElapsed(finish - start);
     }
 
     public CuttingStockSolution getCuttingStockSolution() {
@@ -94,7 +86,7 @@ public class CuttingStockProblem {
             this.masterProblemSolution = this.masterProblem.getSolution();
             masterProblemDualSolution = this.masterProblem.getDualSolution();
 
-            this.objectiveFunctionValues.add(this.masterProblemSolution.getValueObjectiveFunction());
+            this.cuttingStockSolution.addObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
 
             this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
@@ -104,7 +96,7 @@ public class CuttingStockProblem {
                 double[] newColumn = knapsackSubProblemSolution.getSolutions();
 
                 this.masterProblem.addNewColumn(0.0, GRB.INFINITY, 1.0, VariableType.REAL, newColumn);
-                this.totalNumberOfColumnsAdded = this.totalNumberOfColumnsAdded + 1;
+                this.cuttingStockSolution.increaseTotalNumberOfColumnsAdded();
 
             } else
                 return;
@@ -149,13 +141,5 @@ public class CuttingStockProblem {
             constraintCoefficient[index] = items.get(index).getLength();
 
         this.knapsackSubProblem.addConstraint(constraintCoefficient, MathematicalSymbol.LESS_EQUAL, instance.getMaxItemLength());
-    }
-
-    public ArrayList<Double> getObjectiveFunctionValues() {
-        return objectiveFunctionValues;
-    }
-
-    public long getTimeElapsed() {
-        return timeElapsed;
     }
 }

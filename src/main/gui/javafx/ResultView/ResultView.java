@@ -7,22 +7,21 @@ import CuttingStock.CuttingStockSolution;
 import gui.javafx.UserInterfaceJavaFX;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +35,9 @@ public class ResultView extends UserInterfaceJavaFX {
     private StackedBarChart<String, Number> fx_problemGraphicSolution;
 
     @FXML
+    private VBox fx_vBoxRoot;
+
+    @FXML
     private Label fx_solutionValue;
 
     @FXML
@@ -44,48 +46,27 @@ public class ResultView extends UserInterfaceJavaFX {
     @FXML
     private Label fx_elapsedTime;
 
+    @FXML
+    private BorderPane fx_borderPane;
 
+    private CuttingStockSolution cuttingStockSolution;
+    private CuttingStockSolutionViewTable table;
 
-    private CuttingStockSolution solution;
-
-    public ResultView() throws Exception {
+    public ResultView(CuttingStockSolution cuttingStockSolution) throws Exception {
         super();
 
-        CuttingStockInstance instance = new CuttingStockInstance(5600);
+        this.cuttingStockSolution = cuttingStockSolution;
+        this.table = new CuttingStockSolutionViewTable();
 
-        instance.addItems(22, 1380);
-        instance.addItems(25, 1520);
-        instance.addItems(12, 1560);
+        fx_borderPane.setCenter(this.table);
 
-        instance.addItems(14, 1710);
-        instance.addItems(18, 1820);
-        instance.addItems(18, 1880);
+        populateSummaryFields();
+        populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
+        populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
-        instance.addItems(20, 1930);
-        instance.addItems(10, 2000);
-        instance.addItems(12, 2050);
-
-        instance.addItems(14, 2100);
-        instance.addItems(16, 2140);
-        instance.addItems(18, 2150);
-
-        instance.addItems(20, 2200);
-
-        CuttingStockProblem cuttingStockProblem = new CuttingStockProblem(instance);
-        cuttingStockProblem.solve();
-
-        this.solution = cuttingStockProblem.getCuttingStockSolution();
-
-        this.fx_columnsAdded.setText(String.valueOf(cuttingStockProblem.getTotalNumberOfColumnsAdded()));
-        this.fx_elapsedTime.setText(String.valueOf(cuttingStockProblem.getTimeElapsed()));
-        this.fx_solutionValue.setText(String.valueOf(cuttingStockProblem.getObjectiveFunctionValues().get(cuttingStockProblem.getObjectiveFunctionValues().size() - 1)));
+        this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
 
 
-        updateObjectiveFunctionValueGraphic(cuttingStockProblem.getObjectiveFunctionValues());
-
-        updateSolutions(cuttingStockProblem.getCuttingStockSolution().getSolutions());
-
-        updateUserInterface();
     }
 
     @Override
@@ -101,7 +82,13 @@ public class ResultView extends UserInterfaceJavaFX {
         this.stage.show();
     }
 
-    private void updateObjectiveFunctionValueGraphic(ArrayList<Double> objectiveFunctionValues) {
+    private void populateSummaryFields(){
+        this.fx_columnsAdded.setText(String.valueOf(this.cuttingStockSolution.getTotalNumberOfColumnsAdded()));
+        this.fx_solutionValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumObjectiveFunctionValues()));
+        this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed()+ " ms ");
+    }
+
+    private void populateObjectiveLineChart(ArrayList<Double> objectiveFunctionValues) {
 
         XYChart.Series series = new XYChart.Series();
 
@@ -115,7 +102,7 @@ public class ResultView extends UserInterfaceJavaFX {
     }
 
 
-    private void updateSolutions(Map<Integer, CuttingStockPattern> input) {
+    private void populateGraphicSolutionStackedBarChart(Map<Integer, CuttingStockPattern> input) {
 
         Map<Double, XYChart.Series<String, Number>> hashMapSeries = new HashMap<>();
 
@@ -132,47 +119,50 @@ public class ResultView extends UserInterfaceJavaFX {
 
                 String x = String.format("Pattern #%d - x%d", pair.getKey(), pair.getValue().getCardinality());
 
-                final XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(x, value);
+                XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(x, value);
                 data.nodeProperty().addListener(new ChangeListener<Node>() {
                     @Override
                     public void changed(ObservableValue<? extends Node> observableValue, Node node, Node t1) {
 
-                        data.getNode().setStyle("-fx-border-color: black; -fx-border-width: 3 3 3 3;");
+                        t1.setStyle("-fx-border-color: black; -fx-border-width: 4 0 0 0; -fx-bar-fill: rgb(210,210,210); -fx-opacity: 0.4");
+                        displayLabelForData(t1, String.valueOf(value));
 
                     }
                 });
 
                 currentPatternSeries.getData().add(data);
-
-
             }
         }
 
-
-        for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet()) {
-
-            //pair.getValue().getChart().setStyle("-fx-border-color: black;");
-
+        for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet())
             fx_problemGraphicSolution.getData().add(pair.getValue());
-
-
-        }
     }
 
+    private void displayLabelForData(Node node, String string) {
 
+        final Text dataText = new Text(string);
 
+        dataText.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
+        node.parentProperty().addListener(new ChangeListener<Parent>() {
 
+            @Override
+            public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
+                Group parentGroup = (Group) parent;
+                parentGroup.getChildren().add(dataText);
+            }
+        });
 
+        node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
 
-
-    @Override
-    public void updateUserInterface() {
-
-
-    }
-
-    @Override
-    public void closeUserInterface() {
-        stage.close();
+            @Override
+            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                dataText.setLayoutX(
+                        Math.round(bounds.getMinX() + bounds.getWidth() / 2 - dataText.prefWidth(-1) / 2)
+                );
+                dataText.setLayoutY(
+                        Math.round(bounds.getCenterY())
+                );
+            }
+        });
     }
 }

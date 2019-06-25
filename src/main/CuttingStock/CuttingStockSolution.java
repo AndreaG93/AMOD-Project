@@ -1,37 +1,80 @@
 package CuttingStock;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class CuttingStockSolution {
 
-    Map<Integer, CuttingStockPattern> solutions;
+    private Map<Integer, CuttingStockPattern> SolutionPatterns;
+    private int totalNumberOfColumnsAdded;
+    private ArrayList<Double> objectiveFunctionValues;
+    private double minimumObjectiveFunctionValues;
+    private long timeElapsed;
 
     CuttingStockSolution(){
-        this.solutions = new HashMap<>();
+        this.SolutionPatterns = new HashMap<>();
+        this.objectiveFunctionValues = new ArrayList<>();
     }
 
     void addNewPattern(int index, int patternCardinality) {
-        this.solutions.put(index, new CuttingStockPattern(patternCardinality));
+        this.SolutionPatterns.put(index, new CuttingStockPattern(patternCardinality));
     }
 
     void addCuttingLengthToPattern(int index, double length) {
 
-        CuttingStockPattern pattern = this.solutions.get(index);
+        CuttingStockPattern pattern = this.SolutionPatterns.get(index);
         pattern.putCuttingLength(length);
     }
 
-    public Map<Integer, CuttingStockPattern> getSolutions() {
-        return solutions;
+    public Map<Integer, CuttingStockPattern> getSolutionPatterns() {
+        return SolutionPatterns;
+    }
+
+    public void increaseTotalNumberOfColumnsAdded(){
+        this.totalNumberOfColumnsAdded++;
+    }
+
+    public void addObjectiveFunctionValue(double value){
+        this.objectiveFunctionValues.add(value);
+        minimumObjectiveFunctionValues = value;
+    }
+
+    public int getTotalNumberOfColumnsAdded() {
+        return totalNumberOfColumnsAdded;
+    }
+
+    public ArrayList<Double> getObjectiveFunctionValues() {
+        return objectiveFunctionValues;
+    }
+
+    public long getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public void setTimeElapsed(long timeElapsed) {
+        this.timeElapsed = timeElapsed;
+    }
+
+    public double getMinimumObjectiveFunctionValues() {
+        return minimumObjectiveFunctionValues;
     }
 
     public void print(){
 
-        for (Map.Entry<Integer, CuttingStockPattern> pair : solutions.entrySet()) {
+        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
             pair.getValue().print();
         }
+    }
+
+    public ArrayList<CuttingStockPattern> getPatterns(){
+
+        ArrayList<CuttingStockPattern> output = new ArrayList<>();
+
+        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
+            output.add(pair.getValue());
+        }
+
+        return output;
     }
 }
