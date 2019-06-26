@@ -20,9 +20,15 @@ public class LinearProblemSolution {
         return valueObjectiveFunction;
     }
 
-    public void print() {
 
-        for (int i = 0; i < this.solutions.length; i++)
-            System.out.println(String.format(Locale.US, "x_%d = %f", i+1, this.solutions[i]));
+    public double[] getRoundedSolutions() {
+
+        double[] output = new double[this.solutions.length];
+
+        for (int i = 0; i < this.solutions.length; i++){
+            output[i] =   Math.ceil(this.solutions[i]);
+        }
+
+        return output;
     }
 }

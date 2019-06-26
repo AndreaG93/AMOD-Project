@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <bottom>
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT" rotate="180.0" BorderPane.alignment="CENTER">
+            <items>
+                <HBox nodeOrientation="LEFT_TO_RIGHT" rotate="180.0">
+                    <children>
+                        <VBox fillWidth="false">
+                            <children>
+                                <Label text="Solution Value" textFill="#949090" />
+                                <Label fx:id="fx_solutionValue" text="Label">
+                                    <font>
+                                        <Font name="Segoe UI" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </HBox.margin>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="Columns added" textFill="#949090" />
+                                <Label fx:id="fx_columnsAdded" text="Label">
+                                    <font>
+                                        <Font name="Segoe UI" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </HBox.margin>
+                        </VBox>
+                        <VBox fillWidth="false">
+                            <children>
+                                <Label text="Elapsed Time" textFill="#949090" />
+                                <Label fx:id="fx_elapsedTime" text="Label">
+                                    <font>
+                                        <Font name="Segoe UI" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </items>
+        </ToolBar>
+    </bottom>
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab closable="false" text="Objective Function Trend">
+                    <content>
+                        <ScrollPane fitToHeight="true">
+                            <content>
+                                <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                </LineChart>
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab text="Solution - Graphic Representation">
+                    <content>
+                        <ScrollPane fitToHeight="true">
+                            <content>
+                                <StackedBarChart fx:id="fx_problemGraphicSolution" animated="false" legendVisible="false">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                </StackedBarChart>
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab text="Solution">
+                    <content>
+                        <BorderPane fx:id="fx_borderPane" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

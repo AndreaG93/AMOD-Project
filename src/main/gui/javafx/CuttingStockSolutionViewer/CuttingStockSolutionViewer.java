@@ -1,9 +1,7 @@
-package gui.javafx.ResultView;
+package gui.javafx.CuttingStockSolutionViewer;
 
-import CuttingStock.CuttingStockInstance;
-import CuttingStock.CuttingStockPattern;
-import CuttingStock.CuttingStockProblem;
-import CuttingStock.CuttingStockSolution;
+import csp.CuttingStockPattern;
+import csp.CuttingStockSolution;
 import gui.javafx.UserInterfaceJavaFX;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,17 +14,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResultView extends UserInterfaceJavaFX {
+public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
     @FXML
     private LineChart<Number, Number> fx_ObjectiveLineChart;
@@ -49,14 +46,21 @@ public class ResultView extends UserInterfaceJavaFX {
     @FXML
     private BorderPane fx_borderPane;
 
-    private CuttingStockSolution cuttingStockSolution;
-    private CuttingStockSolutionViewTable table;
+    @FXML
+    private ScrollPane scrollbar;
 
-    public ResultView(CuttingStockSolution cuttingStockSolution) throws Exception {
+    @FXML
+    private BorderPane doubletest;
+
+
+    private CuttingStockSolution cuttingStockSolution;
+    private CuttingStockSolutionViewerTable table;
+
+    public CuttingStockSolutionViewer(CuttingStockSolution cuttingStockSolution) throws Exception {
         super();
 
         this.cuttingStockSolution = cuttingStockSolution;
-        this.table = new CuttingStockSolutionViewTable();
+        this.table = new CuttingStockSolutionViewerTable();
 
         fx_borderPane.setCenter(this.table);
 
@@ -65,8 +69,6 @@ public class ResultView extends UserInterfaceJavaFX {
         populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
         this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
-
-
     }
 
     @Override
@@ -92,13 +94,16 @@ public class ResultView extends UserInterfaceJavaFX {
 
         XYChart.Series series = new XYChart.Series();
 
+        double width = 700;
         int iteration = 0;
         for (Double value : objectiveFunctionValues) {
             series.getData().add(new XYChart.Data(String.valueOf(iteration), value));
             iteration++;
+            width += 55;
         }
 
         this.fx_ObjectiveLineChart.getData().add(series);
+        this.fx_ObjectiveLineChart.setPrefWidth(width);
     }
 
 
@@ -134,8 +139,14 @@ public class ResultView extends UserInterfaceJavaFX {
             }
         }
 
-        for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet())
+
+        double width = 700;
+        for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet()) {
             fx_problemGraphicSolution.getData().add(pair.getValue());
+            width += 55;
+        }
+        fx_problemGraphicSolution.setPrefWidth(width);
+
     }
 
     private void displayLabelForData(Node node, String string) {
@@ -165,4 +176,8 @@ public class ResultView extends UserInterfaceJavaFX {
             }
         });
     }
+
+
+
+
 }

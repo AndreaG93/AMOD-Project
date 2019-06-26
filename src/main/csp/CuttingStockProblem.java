@@ -1,4 +1,4 @@
-package CuttingStock;
+package csp;
 
 import gurobi.GRB;
 import linearproblem.LinearProblem;
@@ -18,8 +18,6 @@ public class CuttingStockProblem {
     private LinearProblem masterProblem;
     private LinearProblem knapsackSubProblem;
     private LinearProblemSolution masterProblemSolution;
-
-
     private CuttingStockSolution cuttingStockSolution;
 
     public CuttingStockProblem(CuttingStockInstance instance) {
@@ -43,7 +41,6 @@ public class CuttingStockProblem {
         long finish = System.currentTimeMillis();
         buildSolution();
 
-
         this.cuttingStockSolution.setTimeElapsed(finish - start);
     }
 
@@ -54,7 +51,7 @@ public class CuttingStockProblem {
     private void buildSolution() throws Exception {
 
         ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
-        double[] solutionArray = this.masterProblemSolution.getSolutions();
+        double[] solutionArray = this.masterProblemSolution.getRoundedSolutions();
 
         for (int index = 0; index < solutionArray.length; index++) {
 

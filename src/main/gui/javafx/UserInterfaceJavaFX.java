@@ -27,7 +27,7 @@ public abstract class UserInterfaceJavaFX extends UserInterface {
 
         // Get location of FXML file...
         String resourceName = MessageFormat.format("{0}.fxml", this.getClass().getSimpleName());
-        System.out.println(resourceName);
+
         // Get a JavaFX 'FXMLLoader' object; it is used to loading FXML files at runtime...
         FXMLLoader loader = new FXMLLoader(getClass().getResource(resourceName));
 

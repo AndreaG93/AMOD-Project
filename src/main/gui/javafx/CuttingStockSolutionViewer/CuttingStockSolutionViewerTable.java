@@ -1,22 +1,20 @@
-package gui.javafx.ResultView;
+package gui.javafx.CuttingStockSolutionViewer;
 
-import CuttingStock.CuttingStockPattern;
+import csp.CuttingStockPattern;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
-import java.util.List;
+public class CuttingStockSolutionViewerTable extends TableView<CuttingStockPattern> {
 
-public class CuttingStockSolutionViewTable extends TableView<CuttingStockPattern> {
+    public CuttingStockSolutionViewerTable() {
 
-    public CuttingStockSolutionViewTable() {
 
         TableColumn<CuttingStockPattern, String> column1 = new TableColumn<>("Cardinality");
-        TableColumn<CuttingStockPattern, String> column2 = new TableColumn<>("Cardinality");
+        TableColumn<CuttingStockPattern, String> column2 = new TableColumn<>("Pattern");
 
         column1.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<CuttingStockPattern, String>, ObservableValue<String>>() {

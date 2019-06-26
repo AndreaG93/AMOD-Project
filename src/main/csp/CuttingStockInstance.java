@@ -1,4 +1,4 @@
-package CuttingStock;
+package csp;
 
 import java.util.*;
 
@@ -26,5 +26,13 @@ public class CuttingStockInstance {
 
     public ArrayList<CuttingStockItem> getItems() {
         return items;
+    }
+
+    public void print() {
+        System.out.println(String.format("MAX LENGTH %f", this.maxItemLength));
+
+        for (CuttingStockItem item  : this.items){
+            System.out.println(String.format("%5f %-5f", item.getLength(), item.getAmount()));
+        }
     }
 }
