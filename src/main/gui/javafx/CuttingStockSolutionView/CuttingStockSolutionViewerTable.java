@@ -1,4 +1,4 @@
-package gui.javafx.CuttingStockSolutionViewer;
+package gui.javafx.CuttingStockSolutionView;
 
 import csp.CuttingStockPattern;
 import javafx.beans.InvalidationListener;

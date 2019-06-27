@@ -10,15 +10,20 @@ import linearproblem.utility.VariableType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CuttingStockProblem {
 
     private final CuttingStockInstance instance;
-
     private LinearProblem masterProblem;
     private LinearProblem knapsackSubProblem;
     private LinearProblemSolution masterProblemSolution;
     private CuttingStockSolution cuttingStockSolution;
+
+    private boolean timeOut;
+    private Timer timer;
+    private TimerTask task;
 
     public CuttingStockProblem(CuttingStockInstance instance) {
 
@@ -27,18 +32,26 @@ public class CuttingStockProblem {
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
         this.cuttingStockSolution = new CuttingStockSolution();
+        this.timer = new Timer();
+        this.task = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Time Out");
+                timeOut = true;
+            }
+        };
     }
 
     public void solve() throws Exception {
 
-
-
-
         buildMasterProblem();
         buildKnapsackSubProblem();
+
+        timer.schedule( task, 15000 );
         long start = System.currentTimeMillis();
         executeColumnGenerationAlgorithm();
         long finish = System.currentTimeMillis();
+
         buildSolution();
 
         this.cuttingStockSolution.setTimeElapsed(finish - start);
@@ -78,7 +91,7 @@ public class CuttingStockProblem {
         LinearProblemSolution masterProblemDualSolution;
         LinearProblemSolution knapsackSubProblemSolution;
 
-        while (true) {
+        while (!this.timeOut) {
 
             this.masterProblemSolution = this.masterProblem.getSolution();
             masterProblemDualSolution = this.masterProblem.getDualSolution();
@@ -96,8 +109,10 @@ public class CuttingStockProblem {
                 this.cuttingStockSolution.increaseTotalNumberOfColumnsAdded();
 
             } else
-                return;
+                break;
         }
+
+        this.timer.cancel();
     }
 
     private void buildMasterProblem() throws Exception {

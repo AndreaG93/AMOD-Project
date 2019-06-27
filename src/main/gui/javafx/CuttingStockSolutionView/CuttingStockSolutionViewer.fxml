@@ -74,10 +74,11 @@
                             <content>
                                 <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
                                     <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
+                                        <NumberAxis side="LEFT" />
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis side="LEFT" />
+
+                                        <CategoryAxis side="BOTTOM" />
                                     </yAxis>
                                 </LineChart>
                             </content>
@@ -86,7 +87,7 @@
                 </Tab>
                 <Tab text="Solution - Graphic Representation">
                     <content>
-                        <ScrollPane fitToHeight="true">
+                        <ScrollPane>
                             <content>
                                 <StackedBarChart fx:id="fx_problemGraphicSolution" animated="false" legendVisible="false">
                                     <xAxis>

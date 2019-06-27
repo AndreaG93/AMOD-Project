@@ -1,7 +1,6 @@
-import csp.CuttingStockInstance;
-import csp.CuttingStockProblem;
 import file.Waescher;
-import gui.javafx.CuttingStockSolutionViewer.CuttingStockSolutionViewer;
+import gui.javafx.LoadingView.LoadingScreen;
+import gui.javafx.LoadingView.task.CuttingStockProblemResolver;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -10,19 +9,13 @@ public class EntryPoint extends Application {
     @Override
     public void start(Stage arg0) throws Exception {
 
-        CuttingStockInstance instance =  new Waescher().getData();
+        LoadingScreen loadingScreen = new LoadingScreen();
+        Waescher cspInstanceRetriever = new Waescher();
 
-        CuttingStockProblem cuttingStockProblem = new CuttingStockProblem(instance);
-        cuttingStockProblem.solve();
+        Thread resolver = new CuttingStockProblemResolver(cspInstanceRetriever.getData(), loadingScreen);
+        resolver.start();
 
-        try {
-            new CuttingStockSolutionViewer(cuttingStockProblem.getCuttingStockSolution()).showUserInterface();
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            System.exit(1);
-
-        }
+        loadingScreen.showUserInterface();
     }
 
     public static void main(String[] args) {

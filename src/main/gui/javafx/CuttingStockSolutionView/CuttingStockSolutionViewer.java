@@ -1,4 +1,4 @@
-package gui.javafx.CuttingStockSolutionViewer;
+package gui.javafx.CuttingStockSolutionView;
 
 import csp.CuttingStockPattern;
 import csp.CuttingStockSolution;
@@ -56,19 +56,12 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private CuttingStockSolution cuttingStockSolution;
     private CuttingStockSolutionViewerTable table;
 
-    public CuttingStockSolutionViewer(CuttingStockSolution cuttingStockSolution) throws Exception {
+    public CuttingStockSolutionViewer() throws Exception {
         super();
+    }
 
+    public void setCuttingStockSolution(CuttingStockSolution cuttingStockSolution) {
         this.cuttingStockSolution = cuttingStockSolution;
-        this.table = new CuttingStockSolutionViewerTable();
-
-        fx_borderPane.setCenter(this.table);
-
-        populateSummaryFields();
-        populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
-        populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
-
-        this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
     }
 
     @Override
@@ -82,6 +75,20 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
         this.stage.setResizable(true);
 
         this.stage.show();
+    }
+
+    @Override
+    public void updateUserInterface() {
+
+        this.table = new CuttingStockSolutionViewerTable();
+
+        fx_borderPane.setCenter(this.table);
+
+        populateSummaryFields();
+        populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
+        populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
+
+        this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
     }
 
     private void populateSummaryFields(){
@@ -141,12 +148,14 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
 
         double width = 700;
+        double height = 700;
         for (Map.Entry<Double, XYChart.Series<String, Number>> pair : hashMapSeries.entrySet()) {
             fx_problemGraphicSolution.getData().add(pair.getValue());
             width += 55;
+            height += 60;
         }
         fx_problemGraphicSolution.setPrefWidth(width);
-
+        fx_problemGraphicSolution.setPrefHeight(height);
     }
 
     private void displayLabelForData(Node node, String string) {

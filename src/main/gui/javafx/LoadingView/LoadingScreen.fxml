@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<ToolBar mouseTransparent="true" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <items>
+      <VBox>
+         <children>
+            <Label fx:id="label_message" text="Please wait" />
+            <ProgressBar fx:id="progressBar_loading" prefHeight="18.0" prefWidth="319.0">
+               <effect>
+                  <ColorAdjust hue="-0.12" />
+               </effect></ProgressBar>
+         </children>
+      </VBox>
+   </items>
+</ToolBar>
