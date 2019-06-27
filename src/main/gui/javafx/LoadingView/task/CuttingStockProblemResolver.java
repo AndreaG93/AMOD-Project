@@ -17,6 +17,9 @@ public class CuttingStockProblemResolver extends Thread {
             this.cuttingStockSolutionViewer = new CuttingStockSolutionViewer();
             this.cuttingStockProblem = new CuttingStockProblem(instance);
             this.loadingScreen = loadingScreen;
+
+            this.cuttingStockSolutionViewer.setScreenResizable(true);
+            this.cuttingStockSolutionViewer.setScreenTitle("Solution viewer");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class CuttingStockProblemResolver extends Thread {
                     try {
 
                         cuttingStockSolutionViewer.updateUserInterface();
-                        cuttingStockSolutionViewer.showUserInterface();
+                        cuttingStockSolutionViewer.showAsNewStage();
 
                     } catch (Exception e) {
                         e.printStackTrace();

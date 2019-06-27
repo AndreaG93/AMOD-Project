@@ -13,32 +13,17 @@ public class GurobiLinearProblem extends LinearProblem {
 
     public GurobiLinearProblem(){
 
-
-        GRBEnv env = null;
         try {
-            env = new GRBEnv(true);
-
+            GRBEnv env = new GRBEnv(true);
             env.start();
 
             this.linearProblem = new GRBModel(env);
-            //this.linearProblem.set(GRB.DoubleParam.TimeLimit, 100.0);
             this.linearProblem.set(GRB.IntParam.OutputFlag, 0);
+
         } catch (GRBException e) {
             e.printStackTrace();
         }
-
-
     }
-
-    @Override
-    public void addNewVariable(double lowerBound, double upperBound, VariableType varType) throws Exception {
-
-        int newVariableIndex = this.linearProblem.getVars().length;
-
-        this.linearProblem.addVar(lowerBound, upperBound, 0.0, varType.gurobiRepresentation, String.format("x_%d", newVariableIndex));
-        this.linearProblem.update();
-    }
-
 
     @Override
     public void setVariables(int totalNumberOfVariables, double lowerBound, double upperBound, VariableType varType) throws Exception {
@@ -89,20 +74,6 @@ public class GurobiLinearProblem extends LinearProblem {
     }
 
     @Override
-    public double[] getObjectiveFunctionCoefficient() throws Exception {
-
-        GRBVar[] variables = this.linearProblem.getVars();
-        double[] output = new double[variables.length];
-
-        for (int index = 0; index < variables.length; index++) {
-            output[index] = variables[index].get(GRB.DoubleAttr.Obj);
-        }
-
-        return output;
-    }
-
-
-    @Override
     public void addNewColumn(double newVariableLowerBound, double newVariableUpperBound, double value, VariableType varType, double[] columnCoefficient) throws Exception {
 
         GRBColumn col = new GRBColumn();
@@ -118,21 +89,13 @@ public class GurobiLinearProblem extends LinearProblem {
     @Override
     public LinearProblemSolution getDualSolution() {
 
-
-
         GRBConstr[] constrains = this.linearProblem.getConstrs();
         double[] output = new double[constrains.length];
 
         try {
-
-
             for (int i = 0; i < constrains.length; i++) {
                 output[i] = constrains[i].get(GRB.DoubleAttr.Pi);
             }
-
-
-
-
 
         } catch (GRBException e) {
             e.printStackTrace();
@@ -152,12 +115,6 @@ public class GurobiLinearProblem extends LinearProblem {
             for (int index = 0; index < variables.length; index++)
                 solution[index] = variables[index].get(GRB.DoubleAttr.X);
 
-            /*
-            if (this.linearProblem.get(GRB.IntAttr.Status) == GRB.OPTIMAL){
-                this.linearProblem.get(GRB.DoubleAttr.X);
-            }
-*/
-
             return new LinearProblemSolution(solution, this.linearProblem.get(GRB.DoubleAttr.ObjVal));
         } catch (GRBException e) {
             e.printStackTrace();
@@ -176,11 +133,5 @@ public class GurobiLinearProblem extends LinearProblem {
             output[i] = this.linearProblem.getCoeff(constrains[i], this.linearProblem.getVar(index));
 
         return output;
-    }
-
-
-    @Override
-    public void writeToLPFile(String name) throws Exception {
-        this.linearProblem.write(name + ".lp");
     }
 }

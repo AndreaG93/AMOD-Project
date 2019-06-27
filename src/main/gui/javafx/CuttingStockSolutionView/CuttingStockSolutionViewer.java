@@ -11,14 +11,12 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,14 +42,16 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private Label fx_elapsedTime;
 
     @FXML
-    private BorderPane fx_borderPane;
+    private BorderPane brdPn_textSolution;
 
     @FXML
-    private ScrollPane scrollbar;
+    private Label lbl_timeExpired;
 
     @FXML
-    private BorderPane doubletest;
+    private Label lbl_waste;
 
+    @FXML
+    private HBox fx_TEST;
 
     private CuttingStockSolution cuttingStockSolution;
     private CuttingStockSolutionViewerTable table;
@@ -65,24 +65,13 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     }
 
     @Override
-    public void showUserInterface() {
-
-        this.stage = new Stage();
-        this.scene = new Scene(this.root);
-
-        this.stage.setTitle("Home");
-        this.stage.setScene(this.scene);
-        this.stage.setResizable(true);
-
-        this.stage.show();
-    }
-
-    @Override
     public void updateUserInterface() {
+
+        this.fx_TEST.setStyle("-fx-background-color: linear-gradient(to bottom, #F0F0F0, #ffffff);");
 
         this.table = new CuttingStockSolutionViewerTable();
 
-        fx_borderPane.setCenter(this.table);
+        brdPn_textSolution.setCenter(this.table);
 
         populateSummaryFields();
         populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
@@ -91,10 +80,12 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
         this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
     }
 
-    private void populateSummaryFields(){
+    private void populateSummaryFields() {
         this.fx_columnsAdded.setText(String.valueOf(this.cuttingStockSolution.getTotalNumberOfColumnsAdded()));
         this.fx_solutionValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumObjectiveFunctionValues()));
-        this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed()+ " ms ");
+        this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed() + " ms ");
+        this.lbl_timeExpired.setText(String.valueOf(this.cuttingStockSolution.isCurrentSolutionApproximated()));
+        this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getWaste()));
     }
 
     private void populateObjectiveLineChart(ArrayList<Double> objectiveFunctionValues) {
@@ -185,8 +176,4 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
             }
         });
     }
-
-
-
-
 }

@@ -9,42 +9,38 @@ import java.util.Scanner;
 public class Waescher {
 
     private final static String TXT_EXTENSION = "txt";
-    private File myFile;
 
-    public CuttingStockInstance getData() throws Exception {
+    public CuttingStockInstance parsingCSPInstanceFromFile() throws Exception {
 
-        String line;
+        CuttingStockInstance cuttingStockInstance = null;
+        Scanner scanner;
+        File file;
+        String[] token;
 
-
-        this.myFile = FileManager.getFile(TXT_EXTENSION);
-
-        Scanner sc2 = null;
         try {
-            sc2 = new Scanner(this.myFile);
+
+            file = FileManager.getFile(TXT_EXTENSION);
+            scanner = new Scanner(file);
+
+            // Ignore first line!!
+            scanner.nextLine();
+
+            // Read max length
+            token = scanner.nextLine().split(" ");
+            cuttingStockInstance = new CuttingStockInstance(Double.valueOf(token[0]));
+
+            // Get items...
+            while (scanner.hasNextLine()) {
+                token = scanner.nextLine().split("\t");
+
+                cuttingStockInstance.addItems(Double.valueOf(token[1]), Double.valueOf(token[0]));
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-        sc2.nextLine();
-        line = sc2.nextLine();
-        String[] words = line.split(" ");
-
-
-        CuttingStockInstance cuttingStockInstance = new CuttingStockInstance(Double.valueOf(words[0]));
-
-        while (sc2.hasNextLine()) {
-            line = sc2.nextLine();
-            words = line.split("\t");
-
-            cuttingStockInstance.addItems(Double.valueOf(words[1]),Double.valueOf(words[0]));
+            System.exit(1);
         }
 
         return cuttingStockInstance;
     }
-
-
-
-
-
-
 }

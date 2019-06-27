@@ -11,10 +11,15 @@ public class CuttingStockSolution {
     private ArrayList<Double> objectiveFunctionValues;
     private double minimumObjectiveFunctionValues;
     private long timeElapsed;
+    private boolean isCurrentSolutionApproximated;
+    private final double maxItemLength;
 
-    CuttingStockSolution(){
+
+    CuttingStockSolution(double maxItemLength){
+        this.maxItemLength = maxItemLength;
         this.SolutionPatterns = new HashMap<>();
         this.objectiveFunctionValues = new ArrayList<>();
+        this.isCurrentSolutionApproximated = false;
     }
 
     void addNewPattern(int index, int patternCardinality) {
@@ -25,6 +30,27 @@ public class CuttingStockSolution {
 
         CuttingStockPattern pattern = this.SolutionPatterns.get(index);
         pattern.putCuttingLength(length);
+    }
+
+    public double getWaste() {
+
+        double output = 0;
+
+        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
+
+            double currentCutLength = 0;
+
+            for (Double value : pair.getValue().getCuttingLengths()){
+                currentCutLength += value;
+            }
+
+            if (currentCutLength > this.maxItemLength)
+                System.exit(-2);
+
+            output += this.maxItemLength - currentCutLength;
+        }
+
+        return output;
     }
 
     public Map<Integer, CuttingStockPattern> getSolutionPatterns() {
@@ -78,7 +104,11 @@ public class CuttingStockSolution {
         return output;
     }
 
+    public void setCurrentSolutionAsApproximate(){
+        this.isCurrentSolutionApproximated = true;
+    }
 
-
-
+    public boolean isCurrentSolutionApproximated() {
+        return isCurrentSolutionApproximated;
+    }
 }

@@ -7,9 +7,9 @@
 <?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -17,9 +17,9 @@
 
 <BorderPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <bottom>
-        <ToolBar nodeOrientation="RIGHT_TO_LEFT" rotate="180.0" BorderPane.alignment="CENTER">
-            <items>
-                <HBox nodeOrientation="LEFT_TO_RIGHT" rotate="180.0">
+        <VBox>
+         <Separator prefWidth="200.0" />
+                <HBox fx:id="fx_TEST">
                     <children>
                         <VBox fillWidth="false">
                             <children>
@@ -60,10 +60,35 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </HBox.margin>
                         </VBox>
+                  <VBox fillWidth="false" layoutX="221.0" layoutY="20.0">
+                     <children>
+                        <Label text="Has computation time expired?" textFill="#949090" />
+                        <Label fx:id="lbl_timeExpired" text="Label">
+                           <font>
+                              <Font name="Segoe UI" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox fillWidth="false" layoutX="311.0" layoutY="20.0">
+                     <children>
+                        <Label text="Waste" textFill="#949090" />
+                        <Label fx:id="lbl_waste" text="Label">
+                           <font>
+                              <Font name="Segoe UI" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
                     </children>
                 </HBox>
-            </items>
-        </ToolBar>
+        </VBox>
     </bottom>
     <center>
         <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
@@ -73,13 +98,13 @@
                         <ScrollPane fitToHeight="true">
                             <content>
                                 <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
-                                    <xAxis>
-                                        <NumberAxis side="LEFT" />
-                                    </xAxis>
                                     <yAxis>
-
-                                        <CategoryAxis side="BOTTOM" />
+                                        <NumberAxis side="LEFT" />
                                     </yAxis>
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+
                                 </LineChart>
                             </content>
                         </ScrollPane>
@@ -103,7 +128,7 @@
                 </Tab>
                 <Tab text="Solution">
                     <content>
-                        <BorderPane fx:id="fx_borderPane" prefHeight="200.0" prefWidth="200.0" />
+                        <BorderPane fx:id="brdPn_textSolution" prefHeight="200.0" prefWidth="200.0" />
                     </content>
                 </Tab>
             </tabs>

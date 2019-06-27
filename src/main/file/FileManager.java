@@ -2,11 +2,10 @@ package file;
 
 import java.io.File;
 import java.nio.file.Paths;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class FileManager {
+class FileManager {
 
 	/**
 	 * This method is used to get a {@code File} object.
@@ -14,9 +13,8 @@ public class FileManager {
 	 * @param validExtension
 	 *            - Represents a {@code String} object.
 	 * @return A {@code File} object.
-	 * @throws Exception
 	 */
-	public static File getFile(String validExtension) throws Exception {
+	static File getFile(String validExtension) throws Exception {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(validExtension, validExtension);
 
@@ -44,9 +42,8 @@ public class FileManager {
 	 * @param requiredExtensions
 	 *            - Represents a {@code String[]} object.
 	 * @return A {@code boolean}.
-	 * @throws Exception
 	 */
-	public static boolean isValidFile(File myFile, String... requiredExtensions) throws Exception {
+	static boolean isValidFile(File myFile, String... requiredExtensions) throws Exception {
 
 		if (myFile.exists() && myFile.isFile()) {
 
@@ -78,7 +75,7 @@ public class FileManager {
 	 *            - Represents a {@code File} object.
 	 * @return A {@code String} object.
 	 */
-	public static String getFileExtension(File arg0) {
+	private static String getFileExtension(File arg0) {
 		String ext = null;
 		String s = arg0.getName();
 		int i = s.lastIndexOf('.');

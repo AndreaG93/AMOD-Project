@@ -64,22 +64,7 @@ public class LoadingScreen extends UserInterfaceJavaFX {
 	}
 
 	@Override
-	public void showUserInterface() {
-
-		this.stage = new Stage();
-		this.scene = new Scene(this.root);
-
-		this.stage.setTitle("Please wait...");
-		this.stage.setScene(this.scene);
-		this.stage.setResizable(false);
-		this.stage.initStyle(StageStyle.UNDECORATED);
-
-		this.stage.show();
-		this.startProgressBarColorAnimation();
-	}
-
-	@Override
 	public void updateUserInterface() {
-
+		this.startProgressBarColorAnimation();
 	}
 }

@@ -3,6 +3,7 @@ import gui.javafx.LoadingView.LoadingScreen;
 import gui.javafx.LoadingView.task.CuttingStockProblemResolver;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class EntryPoint extends Application {
 
@@ -10,12 +11,15 @@ public class EntryPoint extends Application {
     public void start(Stage arg0) throws Exception {
 
         LoadingScreen loadingScreen = new LoadingScreen();
+        loadingScreen.setStageStyle(StageStyle.UNDECORATED);
+
         Waescher cspInstanceRetriever = new Waescher();
 
-        Thread resolver = new CuttingStockProblemResolver(cspInstanceRetriever.getData(), loadingScreen);
+        Thread resolver = new CuttingStockProblemResolver(cspInstanceRetriever.parsingCSPInstanceFromFile(), loadingScreen);
         resolver.start();
 
-        loadingScreen.showUserInterface();
+        loadingScreen.updateUserInterface();
+        loadingScreen.showAsNewStage();
     }
 
     public static void main(String[] args) {

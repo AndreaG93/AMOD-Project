@@ -31,13 +31,14 @@ public class CuttingStockProblem {
 
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
-        this.cuttingStockSolution = new CuttingStockSolution();
+        this.cuttingStockSolution = new CuttingStockSolution(instance.getMaxItemLength());
         this.timer = new Timer();
         this.task = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Time Out");
+
                 timeOut = true;
+                cuttingStockSolution.setCurrentSolutionAsApproximate();
             }
         };
     }
