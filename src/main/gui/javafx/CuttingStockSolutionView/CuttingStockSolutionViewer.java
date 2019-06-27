@@ -54,7 +54,6 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private HBox fx_TEST;
 
     private CuttingStockSolution cuttingStockSolution;
-    private CuttingStockSolutionViewerTable table;
 
     public CuttingStockSolutionViewer() throws Exception {
         super();
@@ -69,15 +68,15 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
         this.fx_TEST.setStyle("-fx-background-color: linear-gradient(to bottom, #F0F0F0, #ffffff);");
 
-        this.table = new CuttingStockSolutionViewerTable();
+        CuttingStockSolutionViewerTable table = new CuttingStockSolutionViewerTable();
 
-        brdPn_textSolution.setCenter(this.table);
+        brdPn_textSolution.setCenter(table);
 
         populateSummaryFields();
         populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
         populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
-        this.table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
+        table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
     }
 
     private void populateSummaryFields() {
