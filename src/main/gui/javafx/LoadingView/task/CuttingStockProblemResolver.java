@@ -5,6 +5,8 @@ import csp.CuttingStockProblem;
 import gui.javafx.CuttingStockSolutionView.CuttingStockSolutionViewer;
 import gui.javafx.LoadingView.LoadingScreen;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class CuttingStockProblemResolver extends Thread {
 
@@ -50,7 +52,25 @@ public class CuttingStockProblemResolver extends Thread {
             });
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    loadingScreen.close();
+                    try {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Error", ButtonType.OK);
+                        alert.setContentText(e.getMessage());
+                        alert.showAndWait();
+
+                        System.exit(1);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 }

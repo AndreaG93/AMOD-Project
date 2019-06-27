@@ -104,10 +104,14 @@ public class GurobiLinearProblem extends LinearProblem {
     }
 
     @Override
-    public LinearProblemSolution getSolution() {
+    public LinearProblemSolution getSolution() throws Exception {
 
         try {
             this.linearProblem.optimize();
+
+            if (this.linearProblem.get(GRB.IntAttr.Status) == GRB.INFEASIBLE){
+                throw new Exception("The problem is infeasible.");
+            }
 
             GRBVar[] variables = this.linearProblem.getVars();
             double[] solution = new double[variables.length];

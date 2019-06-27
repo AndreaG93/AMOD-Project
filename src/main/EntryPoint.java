@@ -1,4 +1,4 @@
-import file.Waescher;
+import file.WaescherFile;
 import gui.javafx.LoadingView.LoadingScreen;
 import gui.javafx.LoadingView.task.CuttingStockProblemResolver;
 import javafx.application.Application;
@@ -13,9 +13,7 @@ public class EntryPoint extends Application {
         LoadingScreen loadingScreen = new LoadingScreen();
         loadingScreen.setStageStyle(StageStyle.UNDECORATED);
 
-        Waescher cspInstanceRetriever = new Waescher();
-
-        Thread resolver = new CuttingStockProblemResolver(cspInstanceRetriever.parsingCSPInstanceFromFile(), loadingScreen);
+        Thread resolver = new CuttingStockProblemResolver(WaescherFile.parsingCSPInstance(), loadingScreen);
         resolver.start();
 
         loadingScreen.updateUserInterface();

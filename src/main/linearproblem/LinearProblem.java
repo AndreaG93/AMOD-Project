@@ -5,7 +5,7 @@ import linearproblem.utility.VariableType;
 
 public abstract class LinearProblem {
 
-    public abstract LinearProblemSolution getSolution();
+    public abstract LinearProblemSolution getSolution() throws Exception;
     public abstract LinearProblemSolution getDualSolution();
 
     public abstract void setObjectiveFunctionType(LinearProblemType type) throws Exception;

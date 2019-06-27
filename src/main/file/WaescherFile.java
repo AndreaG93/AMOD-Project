@@ -6,11 +6,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Waescher {
+public class WaescherFile {
 
     private final static String TXT_EXTENSION = "txt";
 
-    public CuttingStockInstance parsingCSPInstanceFromFile() throws Exception {
+    public static CuttingStockInstance parsingCSPInstance() throws Exception {
 
         CuttingStockInstance cuttingStockInstance = null;
         Scanner scanner;
