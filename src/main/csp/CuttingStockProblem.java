@@ -50,9 +50,10 @@ public class CuttingStockProblem {
 
         timer.schedule( task, 15000 );
         long start = System.currentTimeMillis();
-        executeColumnGenerationAlgorithm();
-        long finish = System.currentTimeMillis();
 
+        executeColumnGenerationAlgorithm();
+
+        long finish = System.currentTimeMillis();
         buildSolution();
 
         this.cuttingStockSolution.setTimeElapsed(finish - start);
@@ -65,7 +66,7 @@ public class CuttingStockProblem {
     private void buildSolution() throws Exception {
 
         ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
-        double[] solutionArray = this.masterProblemSolution.getRoundedSolutions();
+        double[] solutionArray = this.cuttingStockSolution.getBetterIntegerSolution();
 
         for (int index = 0; index < solutionArray.length; index++) {
 
@@ -91,13 +92,22 @@ public class CuttingStockProblem {
 
         LinearProblemSolution masterProblemDualSolution;
         LinearProblemSolution knapsackSubProblemSolution;
+        double[] currentIntegerSolution;
 
         while (!this.timeOut) {
 
             this.masterProblemSolution = this.masterProblem.getSolution();
             masterProblemDualSolution = this.masterProblem.getDualSolution();
 
-            this.cuttingStockSolution.addObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
+            this.cuttingStockSolution.addRelaxedObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
+
+            currentIntegerSolution = this.masterProblemSolution.getRoundedSolutions();
+
+            double fun = 0.0;
+            for (Double value : currentIntegerSolution){
+                fun += value;
+            }
+            this.cuttingStockSolution.addObjectiveFunctionValue(fun, currentIntegerSolution);
 
             this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();

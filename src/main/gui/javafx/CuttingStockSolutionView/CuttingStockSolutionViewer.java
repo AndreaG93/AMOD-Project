@@ -25,33 +25,28 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
     @FXML
     private LineChart<Number, Number> fx_ObjectiveLineChart;
-
     @FXML
     private StackedBarChart<String, Number> fx_problemGraphicSolution;
-
     @FXML
     private VBox fx_vBoxRoot;
-
-    @FXML
-    private Label fx_solutionValue;
-
     @FXML
     private Label fx_columnsAdded;
-
     @FXML
     private Label fx_elapsedTime;
-
     @FXML
     private BorderPane brdPn_textSolution;
-
     @FXML
     private Label lbl_timeExpired;
-
     @FXML
     private Label lbl_waste;
-
     @FXML
-    private HBox fx_TEST;
+    private HBox hbx_panel1;
+    @FXML
+    private HBox hbx_panel2;
+    @FXML
+    private Label lbl_betterIntegerSolution;
+    @FXML
+    private Label lbl_betterRealSolution;
 
     private CuttingStockSolution cuttingStockSolution;
 
@@ -66,14 +61,17 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     @Override
     public void updateUserInterface() {
 
-        this.fx_TEST.setStyle("-fx-background-color: linear-gradient(to bottom, #F0F0F0, #ffffff);");
+        this.hbx_panel1.setStyle("-fx-background-color: linear-gradient(to bottom, #F0F0F0, #ffffff);");
+        this.hbx_panel2.setStyle("-fx-background-color: linear-gradient(to bottom, #F0F0F0, #ffffff);");
 
         CuttingStockSolutionViewerTable table = new CuttingStockSolutionViewerTable();
 
         brdPn_textSolution.setCenter(table);
 
         populateSummaryFields();
+        populateObjectiveLineChart(cuttingStockSolution.getRelaxedObjectiveFunctionValues());
         populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
+
         populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
         table.setItems(FXCollections.observableArrayList(this.cuttingStockSolution.getPatterns()));
@@ -81,10 +79,11 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
     private void populateSummaryFields() {
         this.fx_columnsAdded.setText(String.valueOf(this.cuttingStockSolution.getTotalNumberOfColumnsAdded()));
-        this.fx_solutionValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumObjectiveFunctionValues()));
+        this.lbl_betterRealSolution.setText(String.valueOf(this.cuttingStockSolution.getMinimumRelaxedObjectiveFunctionValues()));
         this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed() + " ms ");
         this.lbl_timeExpired.setText(String.valueOf(this.cuttingStockSolution.isCurrentSolutionApproximated()));
         this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getWaste()));
+        this.lbl_betterIntegerSolution.setText(String.valueOf(this.cuttingStockSolution.getMinimumIntegerObjectiveFunctionValues()));
     }
 
     private void populateObjectiveLineChart(ArrayList<Double> objectiveFunctionValues) {

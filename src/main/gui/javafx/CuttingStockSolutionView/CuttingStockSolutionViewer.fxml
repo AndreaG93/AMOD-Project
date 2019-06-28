@@ -19,12 +19,12 @@
     <bottom>
         <VBox>
          <Separator prefWidth="200.0" />
-                <HBox fx:id="fx_TEST">
+                <HBox fx:id="hbx_panel1">
                     <children>
                         <VBox fillWidth="false">
                             <children>
-                                <Label text="Solution Value" textFill="#949090" />
-                                <Label fx:id="fx_solutionValue" text="Label">
+                                <Label text="Better Approx. Real Solution Value" textFill="#949090" />
+                                <Label fx:id="lbl_betterRealSolution" text="Label">
                                     <font>
                                         <Font name="Segoe UI" size="24.0" />
                                     </font>
@@ -88,6 +88,24 @@
                   </VBox>
                     </children>
                 </HBox>
+         <Separator layoutX="10.0" layoutY="10.0" prefWidth="200.0" />
+         <HBox fx:id="hbx_panel2" layoutX="10.0" layoutY="13.0">
+            <children>
+               <VBox fillWidth="false">
+                  <children>
+                     <Label text="Better Approx. Integer Solution Value" textFill="#949090" />
+                     <Label fx:id="lbl_betterIntegerSolution" text="Label">
+                        <font>
+                           <Font name="Segoe UI" size="24.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </HBox.margin>
+               </VBox>
+            </children>
+         </HBox>
         </VBox>
     </bottom>
     <center>

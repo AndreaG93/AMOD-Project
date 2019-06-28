@@ -7,7 +7,7 @@ public class CuttingStockPattern {
     private final int cardinality;
     private ArrayList<Double> cuttingLengths;
 
-    public CuttingStockPattern(int cardinality) {
+    CuttingStockPattern(int cardinality) {
         this.cardinality = cardinality;
         this.cuttingLengths = new ArrayList<>();
     }
@@ -20,11 +20,7 @@ public class CuttingStockPattern {
         return cuttingLengths;
     }
 
-    public void putCuttingLength(double length) {
+    void putCuttingLength(double length) {
         this.cuttingLengths.add(length);
-    }
-
-    public void print() {
-        System.out.println(String.format("%5d %s %-100s", this.cardinality, "x", this.cuttingLengths.toString()));
     }
 }

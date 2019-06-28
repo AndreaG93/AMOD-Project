@@ -3,22 +3,23 @@ package linearproblem;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
 
-public abstract class LinearProblem {
+public interface LinearProblem {
 
-    public abstract LinearProblemSolution getSolution() throws Exception;
-    public abstract LinearProblemSolution getDualSolution();
+    LinearProblemSolution getSolution() throws Exception;
+    
+	LinearProblemSolution getDualSolution() throws Exception;
 
-    public abstract void setObjectiveFunctionType(LinearProblemType type) throws Exception;
+    void setObjectiveFunctionType(LinearProblemType type) throws Exception;
 
-    public abstract void changeObjectiveFunctionCoefficients(double[] newCoefficients) throws Exception;
+    void changeObjectiveFunctionCoefficients(double[] newCoefficients) throws Exception;
 
-    public abstract void addConstraint(double[] coefficients, MathematicalSymbol symbol, double value) throws Exception;
+    void addConstraint(double[] coefficients, MathematicalSymbol symbol, double value) throws Exception;
 
-    public abstract void setVariables(int totalNumberOfVariables, double lowerBound, double upperBound, VariableType varType) throws Exception;
+    void setVariables(int totalNumberOfVariables, double lowerBound, double upperBound, VariableType varType) throws Exception;
 
-    public abstract void setObjectiveFunction(double[] coefficients, LinearProblemType type) throws Exception;
+    void setObjectiveFunction(double[] coefficients, LinearProblemType type) throws Exception;
 
-    public abstract void addNewColumn(double newVariableLowerBound, double newVariableUpperBound, double value, VariableType varType, double[] columnCoefficient) throws Exception;
+    void addNewColumn(double newVariableLowerBound, double newVariableUpperBound, double value, VariableType varType, double[] columnCoefficient) throws Exception;
 
-    public abstract double[] getColumnCoefficient(int index) throws Exception;
+    double[] getColumnCoefficient(int index) throws Exception;
 }

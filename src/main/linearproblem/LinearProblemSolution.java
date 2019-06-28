@@ -20,7 +20,6 @@ public class LinearProblemSolution {
         return valueObjectiveFunction;
     }
 
-
     public double[] getRoundedSolutions() {
 
         double[] output = new double[this.solutions.length];

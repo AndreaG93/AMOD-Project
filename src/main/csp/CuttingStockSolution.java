@@ -7,19 +7,32 @@ import java.util.Map;
 public class CuttingStockSolution {
 
     private Map<Integer, CuttingStockPattern> SolutionPatterns;
+
     private int totalNumberOfColumnsAdded;
-    private ArrayList<Double> objectiveFunctionValues;
-    private double minimumObjectiveFunctionValues;
     private long timeElapsed;
     private boolean isCurrentSolutionApproximated;
     private final double maxItemLength;
 
+    private ArrayList<Double> objectiveFunctionValues;
+    private ArrayList<Double> relaxedObjectiveFunctionValues;
+    private ArrayList<Integer> wasteValue;
+
+    private double minimumObjectiveFunctionValues;
+    private double minimumRelaxedObjectiveFunctionValues;
+
+    private double[] betterIntegerSolution;
 
     CuttingStockSolution(double maxItemLength){
         this.maxItemLength = maxItemLength;
         this.SolutionPatterns = new HashMap<>();
+        this.relaxedObjectiveFunctionValues = new ArrayList<>();
         this.objectiveFunctionValues = new ArrayList<>();
         this.isCurrentSolutionApproximated = false;
+        this.minimumObjectiveFunctionValues = Double.POSITIVE_INFINITY;
+    }
+
+    public double[] getBetterIntegerSolution() {
+        return betterIntegerSolution;
     }
 
     void addNewPattern(int index, int patternCardinality) {
@@ -57,22 +70,35 @@ public class CuttingStockSolution {
         return SolutionPatterns;
     }
 
-    public void increaseTotalNumberOfColumnsAdded(){
+    void increaseTotalNumberOfColumnsAdded(){
         this.totalNumberOfColumnsAdded++;
     }
 
-    public void addObjectiveFunctionValue(double value){
-        this.objectiveFunctionValues.add(value);
-        minimumObjectiveFunctionValues = value;
+    void addRelaxedObjectiveFunctionValue(double value){
+        this.relaxedObjectiveFunctionValues.add(value);
+        minimumRelaxedObjectiveFunctionValues = value;
     }
+
+    void addObjectiveFunctionValue(double value, double[] currentIntegerSolution) {
+        this.objectiveFunctionValues.add(value);
+
+        if (minimumObjectiveFunctionValues > value) {
+            minimumObjectiveFunctionValues = value;
+            betterIntegerSolution = currentIntegerSolution;
+        }
+    }
+
+
+
+
+
+
 
     public int getTotalNumberOfColumnsAdded() {
         return totalNumberOfColumnsAdded;
     }
 
-    public ArrayList<Double> getObjectiveFunctionValues() {
-        return objectiveFunctionValues;
-    }
+
 
     public long getTimeElapsed() {
         return timeElapsed;
@@ -82,15 +108,8 @@ public class CuttingStockSolution {
         this.timeElapsed = timeElapsed;
     }
 
-    public double getMinimumObjectiveFunctionValues() {
-        return minimumObjectiveFunctionValues;
-    }
-
-    public void print(){
-
-        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
-            pair.getValue().print();
-        }
+    public double getMinimumRelaxedObjectiveFunctionValues() {
+        return minimumRelaxedObjectiveFunctionValues;
     }
 
     public ArrayList<CuttingStockPattern> getPatterns(){
@@ -110,5 +129,17 @@ public class CuttingStockSolution {
 
     public boolean isCurrentSolutionApproximated() {
         return isCurrentSolutionApproximated;
+    }
+
+    public ArrayList<Double> getRelaxedObjectiveFunctionValues() {
+        return relaxedObjectiveFunctionValues;
+    }
+
+    public ArrayList<Double> getObjectiveFunctionValues() {
+        return objectiveFunctionValues;
+    }
+
+    public double getMinimumIntegerObjectiveFunctionValues() {
+        return this.minimumObjectiveFunctionValues;
     }
 }

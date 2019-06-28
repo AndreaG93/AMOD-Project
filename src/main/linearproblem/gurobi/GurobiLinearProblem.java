@@ -7,7 +7,7 @@ import linearproblem.LinearProblemType;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
 
-public class GurobiLinearProblem extends LinearProblem {
+public class GurobiLinearProblem implements LinearProblem {
 
     private GRBModel linearProblem;
 
