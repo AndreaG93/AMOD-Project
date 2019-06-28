@@ -11,67 +11,34 @@ public class CuttingStockSolution {
     private int totalNumberOfColumnsAdded;
     private long timeElapsed;
     private boolean isCurrentSolutionApproximated;
-    private final double maxItemLength;
 
     private ArrayList<Double> objectiveFunctionValues;
     private ArrayList<Double> relaxedObjectiveFunctionValues;
-    private ArrayList<Integer> wasteValue;
+    private ArrayList<Double> wasteValues;
 
     private double minimumObjectiveFunctionValues;
     private double minimumRelaxedObjectiveFunctionValues;
+    private double minimumWaste;
+    private double minimumWasteIntegerObjectiveFunctionValue;
 
-    private double[] betterIntegerSolution;
+    private int iterationIndex = 0;
+    private int indexWhenOFIntegerIsMinimum = 0;
 
-    CuttingStockSolution(double maxItemLength){
-        this.maxItemLength = maxItemLength;
+
+    CuttingStockSolution(){
         this.SolutionPatterns = new HashMap<>();
+
         this.relaxedObjectiveFunctionValues = new ArrayList<>();
         this.objectiveFunctionValues = new ArrayList<>();
+        this.wasteValues = new ArrayList<>();
+
         this.isCurrentSolutionApproximated = false;
         this.minimumObjectiveFunctionValues = Double.POSITIVE_INFINITY;
     }
 
-    public double[] getBetterIntegerSolution() {
-        return betterIntegerSolution;
-    }
-
-    void addNewPattern(int index, int patternCardinality) {
-        this.SolutionPatterns.put(index, new CuttingStockPattern(patternCardinality));
-    }
-
-    void addCuttingLengthToPattern(int index, double length) {
-
-        CuttingStockPattern pattern = this.SolutionPatterns.get(index);
-        pattern.putCuttingLength(length);
-    }
-
-    public double getWaste() {
-
-        double output = 0;
-
-        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
-
-            double currentCutLength = 0;
-
-            for (Double value : pair.getValue().getCuttingLengths()){
-                currentCutLength += value;
-            }
-
-            if (currentCutLength > this.maxItemLength)
-                System.exit(-2);
-
-            output += this.maxItemLength - currentCutLength;
-        }
-
-        return output;
-    }
-
-    public Map<Integer, CuttingStockPattern> getSolutionPatterns() {
-        return SolutionPatterns;
-    }
-
-    void increaseTotalNumberOfColumnsAdded(){
-        this.totalNumberOfColumnsAdded++;
+    public void addWasteValue(double currentWaste) {
+        this.wasteValues.add(currentWaste);
+        minimumWaste = currentWaste;
     }
 
     void addRelaxedObjectiveFunctionValue(double value){
@@ -79,14 +46,34 @@ public class CuttingStockSolution {
         minimumRelaxedObjectiveFunctionValues = value;
     }
 
-    void addObjectiveFunctionValue(double value, double[] currentIntegerSolution) {
+    void addObjectiveFunctionValue(double value) {
+        iterationIndex++;
         this.objectiveFunctionValues.add(value);
+        minimumWasteIntegerObjectiveFunctionValue = value;
 
         if (minimumObjectiveFunctionValues > value) {
             minimumObjectiveFunctionValues = value;
-            betterIntegerSolution = currentIntegerSolution;
+            indexWhenOFIntegerIsMinimum = iterationIndex;
         }
     }
+
+    public double getWasteValueWhenOFIntegerValueIsMinimum() {
+        return this.wasteValues.get(indexWhenOFIntegerIsMinimum);
+    }
+
+    public Map<Integer, CuttingStockPattern> getSolutionPatterns() {
+        return SolutionPatterns;
+    }
+
+    public void setSolutionPatterns(Map<Integer, CuttingStockPattern> solutionPatterns) {
+        SolutionPatterns = solutionPatterns;
+    }
+
+    void increaseTotalNumberOfColumnsAdded(){
+        this.totalNumberOfColumnsAdded++;
+    }
+
+
 
 
 
@@ -108,7 +95,7 @@ public class CuttingStockSolution {
         this.timeElapsed = timeElapsed;
     }
 
-    public double getMinimumRelaxedObjectiveFunctionValues() {
+    public double getMinimumRealObjectiveFunctionValue() {
         return minimumRelaxedObjectiveFunctionValues;
     }
 
@@ -139,7 +126,23 @@ public class CuttingStockSolution {
         return objectiveFunctionValues;
     }
 
-    public double getMinimumIntegerObjectiveFunctionValues() {
+    public double getMinimumIntegerObjectiveFunctionValue() {
         return this.minimumObjectiveFunctionValues;
     }
+
+
+
+    public ArrayList<Double> getWasteValues() {
+        return wasteValues;
+    }
+
+    public double getMinimumWaste() {
+        return minimumWaste;
+    }
+
+    public double getMinimumWasteIntegerObjectiveFunctionValue() {
+        return minimumWasteIntegerObjectiveFunctionValue;
+    }
+
+
 }

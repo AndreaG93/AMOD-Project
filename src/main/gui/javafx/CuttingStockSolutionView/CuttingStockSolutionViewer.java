@@ -26,7 +26,17 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     @FXML
     private LineChart<Number, Number> fx_ObjectiveLineChart;
     @FXML
+    private LineChart<Number, Number> fx_WasteLineChart;
+    @FXML
     private StackedBarChart<String, Number> fx_problemGraphicSolution;
+
+    @FXML
+    private Label lbl_OFMinimumIntegerValue;
+    @FXML
+    private Label lbl_OFMinimumWasteIntegerValue;
+    @FXML
+    private Label lbl_OFMinimumRealValue;
+
     @FXML
     private VBox fx_vBoxRoot;
     @FXML
@@ -44,9 +54,7 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     @FXML
     private HBox hbx_panel2;
     @FXML
-    private Label lbl_betterIntegerSolution;
-    @FXML
-    private Label lbl_betterRealSolution;
+    private Label lbl_WasteMimimumOFValue;
 
     private CuttingStockSolution cuttingStockSolution;
 
@@ -69,8 +77,9 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
         brdPn_textSolution.setCenter(table);
 
         populateSummaryFields();
-        populateObjectiveLineChart(cuttingStockSolution.getRelaxedObjectiveFunctionValues());
-        populateObjectiveLineChart(cuttingStockSolution.getObjectiveFunctionValues());
+        populateLineChart(cuttingStockSolution.getRelaxedObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Relaxed O.F. Value");
+        populateLineChart(cuttingStockSolution.getObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Integer O.F. Value");
+        populateLineChart(cuttingStockSolution.getWasteValues(), this.fx_WasteLineChart, "");
 
         populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
@@ -78,17 +87,24 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     }
 
     private void populateSummaryFields() {
+
+        this.lbl_OFMinimumRealValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumRealObjectiveFunctionValue()));
+        this.lbl_OFMinimumIntegerValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumIntegerObjectiveFunctionValue()));
+        this.lbl_OFMinimumWasteIntegerValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumWasteIntegerObjectiveFunctionValue()));
+    this.lbl_WasteMimimumOFValue.setText(String.valueOf(this.cuttingStockSolution.getWasteValueWhenOFIntegerValueIsMinimum()));
+
         this.fx_columnsAdded.setText(String.valueOf(this.cuttingStockSolution.getTotalNumberOfColumnsAdded()));
-        this.lbl_betterRealSolution.setText(String.valueOf(this.cuttingStockSolution.getMinimumRelaxedObjectiveFunctionValues()));
+
         this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed() + " ms ");
         this.lbl_timeExpired.setText(String.valueOf(this.cuttingStockSolution.isCurrentSolutionApproximated()));
-        this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getWaste()));
-        this.lbl_betterIntegerSolution.setText(String.valueOf(this.cuttingStockSolution.getMinimumIntegerObjectiveFunctionValues()));
+        this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getMinimumWaste()));
+
     }
 
-    private void populateObjectiveLineChart(ArrayList<Double> objectiveFunctionValues) {
+    private void populateLineChart(ArrayList<Double> objectiveFunctionValues, LineChart<Number, Number> lineChart, String nameSeries) {
 
         XYChart.Series series = new XYChart.Series();
+        series.setName(nameSeries);
 
         double width = 700;
         int iteration = 0;
@@ -98,8 +114,8 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
             width += 55;
         }
 
-        this.fx_ObjectiveLineChart.getData().add(series);
-        this.fx_ObjectiveLineChart.setPrefWidth(width);
+        lineChart.getData().add(series);
+        lineChart.setPrefWidth(width);
     }
 
 

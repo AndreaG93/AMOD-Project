@@ -23,8 +23,8 @@
                     <children>
                         <VBox fillWidth="false">
                             <children>
-                                <Label text="Better Approx. Real Solution Value" textFill="#949090" />
-                                <Label fx:id="lbl_betterRealSolution" text="Label">
+                                <Label text="O.F. Minimum Real Value" textFill="#949090" />
+                                <Label fx:id="lbl_OFMinimumRealValue" text="Label">
                                     <font>
                                         <Font name="Segoe UI" size="24.0" />
                                     </font>
@@ -93,8 +93,34 @@
             <children>
                <VBox fillWidth="false">
                   <children>
-                     <Label text="Better Approx. Integer Solution Value" textFill="#949090" />
-                     <Label fx:id="lbl_betterIntegerSolution" text="Label">
+                     <Label text="O.F. Minimum Integer Value" textFill="#949090" />
+                     <Label fx:id="lbl_OFMinimumIntegerValue" text="Label">
+                        <font>
+                           <Font name="Segoe UI" size="24.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </HBox.margin>
+               </VBox>
+               <VBox fillWidth="false" layoutX="20.0" layoutY="20.0">
+                  <children>
+                     <Label text="Waste value when O.F. Integer Value is minimum" textFill="#949090" />
+                     <Label fx:id="lbl_WasteMimimumOFValue" text="Label">
+                        <font>
+                           <Font name="Segoe UI" size="24.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </HBox.margin>
+               </VBox>
+               <VBox fillWidth="false" layoutX="20.0" layoutY="20.0">
+                  <children>
+                     <Label text="O.F. Integer Value (Minimum waste)" textFill="#949090" />
+                     <Label fx:id="lbl_OFMinimumWasteIntegerValue" text="Label">
                         <font>
                            <Font name="Segoe UI" size="24.0" />
                         </font>
@@ -115,7 +141,24 @@
                     <content>
                         <ScrollPane fitToHeight="true">
                             <content>
-                                <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
+                                <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendSide="LEFT" BorderPane.alignment="CENTER">
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+
+                                </LineChart>
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab closable="false" text="Waste Trend">
+                    <content>
+                        <ScrollPane fitToHeight="true">
+                            <content>
+                                <LineChart fx:id="fx_WasteLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
                                     <yAxis>
                                         <NumberAxis side="LEFT" />
                                     </yAxis>

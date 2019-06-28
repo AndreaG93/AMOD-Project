@@ -8,10 +8,7 @@ import linearproblem.gurobi.GurobiLinearProblem;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class CuttingStockProblem {
 
@@ -31,13 +28,14 @@ public class CuttingStockProblem {
 
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
-        this.cuttingStockSolution = new CuttingStockSolution(instance.getMaxItemLength());
+        this.cuttingStockSolution = new CuttingStockSolution();
+
         this.timer = new Timer();
         this.task = new TimerTask() {
             @Override
             public void run() {
 
-                timeOut = true;
+                //timeOut = true;
                 cuttingStockSolution.setCurrentSolutionAsApproximate();
             }
         };
@@ -54,8 +52,8 @@ public class CuttingStockProblem {
         executeColumnGenerationAlgorithm();
 
         long finish = System.currentTimeMillis();
-        buildSolution();
 
+        this.cuttingStockSolution.setSolutionPatterns(buildSolutionPatterns(this.masterProblemSolution.getRoundedSolutions()));
         this.cuttingStockSolution.setTimeElapsed(finish - start);
     }
 
@@ -63,29 +61,59 @@ public class CuttingStockProblem {
         return cuttingStockSolution;
     }
 
-    private void buildSolution() throws Exception {
 
+
+    private Map<Integer, CuttingStockPattern> buildSolutionPatterns(double[] integerSolution) throws Exception {
+
+        Map<Integer, CuttingStockPattern> SolutionPattern = new HashMap<>();
         ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
-        double[] solutionArray = this.cuttingStockSolution.getBetterIntegerSolution();
 
-        for (int index = 0; index < solutionArray.length; index++) {
+        for (int index = 0; index < integerSolution.length; index++) {
 
-            int patternCardinality = (int) solutionArray[index];
+            int patternCardinality = (int) integerSolution[index];
 
             if (patternCardinality != 0) {
-                this.cuttingStockSolution.addNewPattern(index, patternCardinality);
+
+                SolutionPattern.put(index, new CuttingStockPattern(patternCardinality));
+
                 double[] column = this.masterProblem.getColumnCoefficient(index);
 
                 for (int columnIndex = 0; columnIndex < column.length; columnIndex++) {
                     while (column[columnIndex] > 0) {
 
-                        this.cuttingStockSolution.addCuttingLengthToPattern(index, cuttingStockItems.get(columnIndex).getLength());
+                        CuttingStockPattern pattern = SolutionPattern.get(index);
+                        pattern.putCuttingLength(cuttingStockItems.get(columnIndex).getLength());
 
                         column[columnIndex]--;
                     }
                 }
             }
         }
+
+        return SolutionPattern;
+    }
+
+
+    double computeWasteFromPattern(Map<Integer, CuttingStockPattern> solutionPatter) {
+
+        double maxItemLength = this.instance.getMaxItemLength();
+        double output = 0;
+
+        for (Map.Entry<Integer, CuttingStockPattern> pair : solutionPatter.entrySet()) {
+
+            double currentCutLength = 0;
+
+            for (Double value : pair.getValue().getCuttingLengths()){
+                currentCutLength += value;
+            }
+
+            if (currentCutLength > maxItemLength)
+                System.exit(-2);
+
+            output += maxItemLength - currentCutLength;
+        }
+
+        return output;
     }
 
     private void executeColumnGenerationAlgorithm() throws Exception {
@@ -93,6 +121,7 @@ public class CuttingStockProblem {
         LinearProblemSolution masterProblemDualSolution;
         LinearProblemSolution knapsackSubProblemSolution;
         double[] currentIntegerSolution;
+        double currentWaste;
 
         while (!this.timeOut) {
 
@@ -102,12 +131,14 @@ public class CuttingStockProblem {
             this.cuttingStockSolution.addRelaxedObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
 
             currentIntegerSolution = this.masterProblemSolution.getRoundedSolutions();
+            currentWaste = computeWasteFromPattern(buildSolutionPatterns(currentIntegerSolution));
 
-            double fun = 0.0;
+            double objectiveFunctionValue = 0.0;
             for (Double value : currentIntegerSolution){
-                fun += value;
+                objectiveFunctionValue += value;
             }
-            this.cuttingStockSolution.addObjectiveFunctionValue(fun, currentIntegerSolution);
+            this.cuttingStockSolution.addObjectiveFunctionValue(objectiveFunctionValue);
+            this.cuttingStockSolution.addWasteValue(currentWaste);
 
             this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
