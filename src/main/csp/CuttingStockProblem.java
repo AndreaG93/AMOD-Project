@@ -94,7 +94,7 @@ public class CuttingStockProblem {
     }
 
 
-    double computeWasteFromPattern(Map<Integer, CuttingStockPattern> solutionPatter) {
+    private double computeWasteFromPattern(Map<Integer, CuttingStockPattern> solutionPatter) {
 
         double maxItemLength = this.instance.getMaxItemLength();
         double output = 0;
@@ -121,6 +121,7 @@ public class CuttingStockProblem {
         LinearProblemSolution masterProblemDualSolution;
         LinearProblemSolution knapsackSubProblemSolution;
         double[] currentIntegerSolution;
+        double[] currentMasterProblemDualSolution;
         double currentWaste;
 
         while (!this.timeOut) {
@@ -130,6 +131,7 @@ public class CuttingStockProblem {
 
             this.cuttingStockSolution.addRelaxedObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
 
+            currentMasterProblemDualSolution = masterProblemDualSolution.getSolutions();
             currentIntegerSolution = this.masterProblemSolution.getRoundedSolutions();
             currentWaste = computeWasteFromPattern(buildSolutionPatterns(currentIntegerSolution));
 
@@ -140,7 +142,15 @@ public class CuttingStockProblem {
             this.cuttingStockSolution.addObjectiveFunctionValue(objectiveFunctionValue);
             this.cuttingStockSolution.addWasteValue(currentWaste);
 
-            this.knapsackSubProblem.changeObjectiveFunctionCoefficients(masterProblemDualSolution.getSolutions());
+
+            double masterProblemDualSolutionValue = 0.0;
+            for (Double value : currentMasterProblemDualSolution){
+                masterProblemDualSolutionValue += value;
+            }
+            this.cuttingStockSolution.addDualObjectiveFunctionValue(masterProblemDualSolutionValue);
+
+
+            this.knapsackSubProblem.changeObjectiveFunctionCoefficients(currentMasterProblemDualSolution);
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
 
             if (1 - knapsackSubProblemSolution.getValueObjectiveFunction() < 0) {

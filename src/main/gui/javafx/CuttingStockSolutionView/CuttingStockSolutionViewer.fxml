@@ -5,17 +5,19 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="700.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <bottom>
         <VBox>
          <Separator prefWidth="200.0" />
@@ -86,6 +88,19 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </VBox>
+               <VBox fillWidth="false" layoutX="553.0" layoutY="20.0">
+                  <children>
+                     <Label text="Waste Minimum Value" textFill="#949090" />
+                     <Label fx:id="lbl_wasteMin" text="Label">
+                        <font>
+                           <Font name="Segoe UI" size="24.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </HBox.margin>
+               </VBox>
                     </children>
                 </HBox>
          <Separator layoutX="10.0" layoutY="10.0" prefWidth="200.0" />
@@ -139,36 +154,33 @@
             <tabs>
                 <Tab closable="false" text="Objective Function Trend">
                     <content>
-                        <ScrollPane fitToHeight="true">
-                            <content>
-                                <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendSide="LEFT" BorderPane.alignment="CENTER">
-                                    <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                    </yAxis>
-                                    <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                    </xAxis>
-
-                                </LineChart>
-                            </content>
-                        </ScrollPane>
-                    </content>
-                </Tab>
-                <Tab closable="false" text="Waste Trend">
-                    <content>
-                        <ScrollPane fitToHeight="true">
-                            <content>
-                                <LineChart fx:id="fx_WasteLineChart" animated="false" legendVisible="false" BorderPane.alignment="CENTER">
-                                    <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                    </yAxis>
-                                    <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                    </xAxis>
-
-                                </LineChart>
-                            </content>
-                        </ScrollPane>
+                  <BorderPane>
+                     <center>
+                              <ScrollPane fitToHeight="true">
+                                  <content>
+                                      <LineChart fx:id="fx_ObjectiveLineChart" animated="false" legendSide="LEFT" BorderPane.alignment="CENTER">
+                                          <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                          </yAxis>
+                                          <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                          </xAxis>
+      
+                                      </LineChart>
+                                  </content>
+                              </ScrollPane>
+                     </center>
+                     <top>
+                        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <items>
+                              <CheckBox fx:id="chbx_IntegerOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Integer O.F." />
+                              <CheckBox fx:id="chbx_DualOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Dual O.F." />
+                              <CheckBox fx:id="chbx_RelaxedOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Relaxed O.F." />
+                              <CheckBox fx:id="chbx_waste" mnemonicParsing="false" onAction="#updateLineChart" text="Display Waste Trend" />
+                           </items>
+                        </ToolBar>
+                     </top>
+                  </BorderPane>
                     </content>
                 </Tab>
                 <Tab text="Solution - Graphic Representation">
@@ -190,6 +202,11 @@
                 <Tab text="Solution">
                     <content>
                         <BorderPane fx:id="brdPn_textSolution" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                </Tab>
+                <Tab text="Solution (Minimum Waste)">
+                    <content>
+                        <BorderPane fx:id="brdPn_SolutionMinimumWaste" prefHeight="200.0" prefWidth="200.0" />
                     </content>
                 </Tab>
             </tabs>

@@ -13,32 +13,38 @@ public class CuttingStockSolution {
     private boolean isCurrentSolutionApproximated;
 
     private ArrayList<Double> objectiveFunctionValues;
+    private ArrayList<Double> dualObjectiveFunctionValues;
     private ArrayList<Double> relaxedObjectiveFunctionValues;
     private ArrayList<Double> wasteValues;
 
     private double minimumObjectiveFunctionValues;
     private double minimumRelaxedObjectiveFunctionValues;
     private double minimumWaste;
-    private double minimumWasteIntegerObjectiveFunctionValue;
 
     private int iterationIndex = 0;
     private int indexWhenOFIntegerIsMinimum = 0;
-
+    private int indexWhenWasteIsMinimum = 0;
 
     CuttingStockSolution(){
-        this.SolutionPatterns = new HashMap<>();
+        //this.SolutionPatterns = new HashMap<>();
 
         this.relaxedObjectiveFunctionValues = new ArrayList<>();
         this.objectiveFunctionValues = new ArrayList<>();
         this.wasteValues = new ArrayList<>();
+        this.dualObjectiveFunctionValues = new ArrayList<>();
 
         this.isCurrentSolutionApproximated = false;
         this.minimumObjectiveFunctionValues = Double.POSITIVE_INFINITY;
+        this.minimumWaste = Double.POSITIVE_INFINITY;
     }
 
     public void addWasteValue(double currentWaste) {
         this.wasteValues.add(currentWaste);
-        minimumWaste = currentWaste;
+
+        if (minimumWaste > currentWaste) {
+            minimumWaste = currentWaste;
+            indexWhenWasteIsMinimum = iterationIndex;
+        }
     }
 
     void addRelaxedObjectiveFunctionValue(double value){
@@ -49,7 +55,6 @@ public class CuttingStockSolution {
     void addObjectiveFunctionValue(double value) {
         iterationIndex++;
         this.objectiveFunctionValues.add(value);
-        minimumWasteIntegerObjectiveFunctionValue = value;
 
         if (minimumObjectiveFunctionValues > value) {
             minimumObjectiveFunctionValues = value;
@@ -74,17 +79,9 @@ public class CuttingStockSolution {
     }
 
 
-
-
-
-
-
-
-
     public int getTotalNumberOfColumnsAdded() {
         return totalNumberOfColumnsAdded;
     }
-
 
 
     public long getTimeElapsed() {
@@ -136,13 +133,24 @@ public class CuttingStockSolution {
         return wasteValues;
     }
 
+    public double getWasteLastValues() {
+        return this.wasteValues.get(this.wasteValues.size()-1);
+    }
+
     public double getMinimumWaste() {
         return minimumWaste;
     }
 
     public double getMinimumWasteIntegerObjectiveFunctionValue() {
-        return minimumWasteIntegerObjectiveFunctionValue;
+        return objectiveFunctionValues.get(indexWhenWasteIsMinimum);
     }
 
 
+    public void addDualObjectiveFunctionValue(double value) {
+        this.dualObjectiveFunctionValues.add(value);
+    }
+
+    public ArrayList<Double> getDualObjectiveFunctionValues() {
+        return dualObjectiveFunctionValues;
+    }
 }

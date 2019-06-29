@@ -6,12 +6,14 @@ import gui.javafx.UserInterfaceJavaFX;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.*;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -25,8 +27,6 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
     @FXML
     private LineChart<Number, Number> fx_ObjectiveLineChart;
-    @FXML
-    private LineChart<Number, Number> fx_WasteLineChart;
     @FXML
     private StackedBarChart<String, Number> fx_problemGraphicSolution;
 
@@ -55,6 +55,19 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private HBox hbx_panel2;
     @FXML
     private Label lbl_WasteMimimumOFValue;
+    @FXML
+    private CheckBox chbx_IntegerOF;
+    @FXML
+    private CheckBox chbx_DualOF;
+
+    @FXML
+    private CheckBox chbx_RelaxedOF;
+
+    @FXML
+    private CheckBox chbx_waste;
+
+    @FXML
+    private Label lbl_wasteMin;
 
     private CuttingStockSolution cuttingStockSolution;
 
@@ -77,9 +90,9 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
         brdPn_textSolution.setCenter(table);
 
         populateSummaryFields();
-        populateLineChart(cuttingStockSolution.getRelaxedObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Relaxed O.F. Value");
-        populateLineChart(cuttingStockSolution.getObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Integer O.F. Value");
-        populateLineChart(cuttingStockSolution.getWasteValues(), this.fx_WasteLineChart, "");
+
+
+        updateLineChart(null);
 
         populateGraphicSolutionStackedBarChart(cuttingStockSolution.getSolutionPatterns());
 
@@ -91,14 +104,14 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
         this.lbl_OFMinimumRealValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumRealObjectiveFunctionValue()));
         this.lbl_OFMinimumIntegerValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumIntegerObjectiveFunctionValue()));
         this.lbl_OFMinimumWasteIntegerValue.setText(String.valueOf(this.cuttingStockSolution.getMinimumWasteIntegerObjectiveFunctionValue()));
-    this.lbl_WasteMimimumOFValue.setText(String.valueOf(this.cuttingStockSolution.getWasteValueWhenOFIntegerValueIsMinimum()));
+        this.lbl_WasteMimimumOFValue.setText(String.valueOf(this.cuttingStockSolution.getWasteValueWhenOFIntegerValueIsMinimum()));
 
         this.fx_columnsAdded.setText(String.valueOf(this.cuttingStockSolution.getTotalNumberOfColumnsAdded()));
 
         this.fx_elapsedTime.setText(this.cuttingStockSolution.getTimeElapsed() + " ms ");
         this.lbl_timeExpired.setText(String.valueOf(this.cuttingStockSolution.isCurrentSolutionApproximated()));
-        this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getMinimumWaste()));
-
+        this.lbl_waste.setText(String.valueOf(this.cuttingStockSolution.getWasteLastValues()));
+        this.lbl_wasteMin.setText(String.valueOf(this.cuttingStockSolution.getMinimumWaste()));
     }
 
     private void populateLineChart(ArrayList<Double> objectiveFunctionValues, LineChart<Number, Number> lineChart, String nameSeries) {
@@ -189,5 +202,23 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
                 );
             }
         });
+    }
+
+    @FXML
+    void updateLineChart(ActionEvent event) {
+
+        this.fx_ObjectiveLineChart.getData().clear();
+
+        if (this.chbx_RelaxedOF.isSelected())
+            populateLineChart(cuttingStockSolution.getRelaxedObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Relaxed O.F. Value");
+
+        if (this.chbx_IntegerOF.isSelected())
+            populateLineChart(cuttingStockSolution.getObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Integer O.F. Value");
+
+        if (this.chbx_DualOF.isSelected())
+            populateLineChart(cuttingStockSolution.getDualObjectiveFunctionValues(), this.fx_ObjectiveLineChart, "Dual O.F. Value");
+
+        if (this.chbx_waste.isSelected())
+            populateLineChart(cuttingStockSolution.getWasteValues(), this.fx_ObjectiveLineChart, "Waste Trend");
     }
 }

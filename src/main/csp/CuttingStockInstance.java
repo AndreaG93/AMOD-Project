@@ -13,7 +13,7 @@ public class CuttingStockInstance {
     }
 
     public void addItems(double amount, double length) {
-        this.items.add(new CuttingStockItem(amount*64, length));
+        this.items.add(new CuttingStockItem(amount, length));
     }
 
     double getMaxItemLength() {
