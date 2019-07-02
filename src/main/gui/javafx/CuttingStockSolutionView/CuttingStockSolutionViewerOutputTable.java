@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
