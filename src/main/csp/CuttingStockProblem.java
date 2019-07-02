@@ -45,11 +45,10 @@ public class CuttingStockProblem {
         buildMasterProblem();
         buildKnapsackSubProblem();
 
-        timer.schedule( task, 15000 );
+        timer.schedule( task, 20000 );
+
         long start = System.currentTimeMillis();
-
         executeColumnGenerationAlgorithm();
-
         long finish = System.currentTimeMillis();
 
         this.cuttingStockSolution.setTimeElapsed(finish - start);
@@ -66,7 +65,7 @@ public class CuttingStockProblem {
 
         for (int index = 0; index < integerSolution.length; index++) {
 
-            int patternCardinality = (int) integerSolution[index];
+            int patternCardinality = integerSolution[index];
 
             if (patternCardinality != 0) {
 
