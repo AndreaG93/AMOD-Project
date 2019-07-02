@@ -1,33 +1,41 @@
 package linearproblem;
 
-import java.util.Locale;
-
 public class LinearProblemSolution {
 
-    private final double[] solutions;
-    private final double valueObjectiveFunction;
+    private int[] integerSolutions;
+    private int integerValueOfObjectiveFunction;
 
-    public LinearProblemSolution(double[] solutions, double valueObjectiveFunction) {
-        this.solutions = solutions;
-        this.valueObjectiveFunction = valueObjectiveFunction;
-    }
+    private double[] realSolutions;
+    private double realValueOfObjectiveFunction;
 
-    public double[] getSolutions() {
-        return solutions;
-    }
+    public LinearProblemSolution(double[] realSolutions, double realValueOfObjectiveFunction) {
 
-    public double getValueObjectiveFunction() {
-        return valueObjectiveFunction;
-    }
+        this.integerValueOfObjectiveFunction = 0;
+        this.integerSolutions = new int[realSolutions.length];
 
-    public double[] getRoundedSolutions() {
+        this.realValueOfObjectiveFunction = realValueOfObjectiveFunction;
+        this.realSolutions = realSolutions;
 
-        double[] output = new double[this.solutions.length];
+        for (int i = 0; i < this.realSolutions.length; i++){
 
-        for (int i = 0; i < this.solutions.length; i++){
-            output[i] =   Math.ceil(this.solutions[i]);
+            this.integerSolutions[i] = (int) Math.ceil(this.realSolutions[i]);
+            this.integerValueOfObjectiveFunction += integerSolutions[i];
         }
+    }
 
-        return output;
+    public int[] getIntegerSolutions() {
+        return integerSolutions;
+    }
+
+    public int getIntegerValueOfObjectiveFunction() {
+        return integerValueOfObjectiveFunction;
+    }
+
+    public double[] getRealSolutions() {
+        return realSolutions;
+    }
+
+    public double getRealValueOfObjectiveFunction() {
+        return realValueOfObjectiveFunction;
     }
 }

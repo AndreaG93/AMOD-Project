@@ -21,25 +21,51 @@
     <bottom>
         <VBox>
          <Separator prefWidth="200.0" />
-                <HBox fx:id="hbx_panel1">
+                <HBox>
                     <children>
                         <VBox fillWidth="false">
                             <children>
-                                <Label text="O.F. Minimum Real Value" textFill="#949090" />
-                                <Label fx:id="lbl_OFMinimumRealValue" text="Label">
+                                <Label text="Master Problem Objective Function Value" textFill="#949090" />
+                     <HBox>
+                        <children>
+                           <VBox fillWidth="false">
+                              <children>
+                                 <Label text="Integer" textFill="#949090" />
+                                 <Label fx:id="lbl_OF_IntegerValue" text="Label">
                                     <font>
-                                        <Font name="Segoe UI" size="24.0" />
+                                       <Font name="Segoe UI" size="24.0" />
                                     </font>
-                                </Label>
+                                 </Label>
+                              </children>
+                              <HBox.margin>
+                                 <Insets right="20.0" top="10.0" />
+                              </HBox.margin>
+                           </VBox>
+                           <VBox fillWidth="false">
+                              <children>
+                                 <Label text="Relaxed" textFill="#949090" />
+                                 <Label fx:id="lbl_OF_RelaxedValue" text="Label">
+                                    <font>
+                                       <Font name="Segoe UI" size="24.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                              <HBox.margin>
+                                 <Insets right="20.0" top="10.0" />
+                              </HBox.margin>
+                           </VBox>
+                        </children>
+                     </HBox>
                             </children>
                             <HBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </HBox.margin>
                         </VBox>
+               <Separator orientation="VERTICAL" />
                         <VBox>
                             <children>
                                 <Label text="Columns added" textFill="#949090" />
-                                <Label fx:id="fx_columnsAdded" text="Label">
+                                <Label fx:id="lbl_columnsAdded" text="Label">
                                     <font>
                                         <Font name="Segoe UI" size="24.0" />
                                     </font>
@@ -51,8 +77,8 @@
                         </VBox>
                         <VBox fillWidth="false">
                             <children>
-                                <Label text="Elapsed Time" textFill="#949090" />
-                                <Label fx:id="fx_elapsedTime" text="Label">
+                                <Label text="Elapsed Time (Column generation algorithm)" textFill="#949090" />
+                                <Label fx:id="lbl_elapsedTime" text="Label">
                                     <font>
                                         <Font name="Segoe UI" size="24.0" />
                                     </font>
@@ -64,8 +90,8 @@
                         </VBox>
                   <VBox fillWidth="false" layoutX="221.0" layoutY="20.0">
                      <children>
-                        <Label text="Has computation time expired?" textFill="#949090" />
-                        <Label fx:id="lbl_timeExpired" text="Label">
+                        <Label text="Is time out?" textFill="#949090" />
+                        <Label fx:id="lbl_isTimeOut" text="Label">
                            <font>
                               <Font name="Segoe UI" size="24.0" />
                            </font>
@@ -75,78 +101,10 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox fillWidth="false" layoutX="311.0" layoutY="20.0">
-                     <children>
-                        <Label text="Waste" textFill="#949090" />
-                        <Label fx:id="lbl_waste" text="Label">
-                           <font>
-                              <Font name="Segoe UI" size="24.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </VBox>
-               <VBox fillWidth="false" layoutX="553.0" layoutY="20.0">
-                  <children>
-                     <Label text="Waste Minimum Value" textFill="#949090" />
-                     <Label fx:id="lbl_wasteMin" text="Label">
-                        <font>
-                           <Font name="Segoe UI" size="24.0" />
-                        </font>
-                     </Label>
-                  </children>
-                  <HBox.margin>
-                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                  </HBox.margin>
-               </VBox>
                     </children>
                 </HBox>
          <Separator layoutX="10.0" layoutY="10.0" prefWidth="200.0" />
-         <HBox fx:id="hbx_panel2" layoutX="10.0" layoutY="13.0">
-            <children>
-               <VBox fillWidth="false">
-                  <children>
-                     <Label text="O.F. Minimum Integer Value" textFill="#949090" />
-                     <Label fx:id="lbl_OFMinimumIntegerValue" text="Label">
-                        <font>
-                           <Font name="Segoe UI" size="24.0" />
-                        </font>
-                     </Label>
-                  </children>
-                  <HBox.margin>
-                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                  </HBox.margin>
-               </VBox>
-               <VBox fillWidth="false" layoutX="20.0" layoutY="20.0">
-                  <children>
-                     <Label text="Waste value when O.F. Integer Value is minimum" textFill="#949090" />
-                     <Label fx:id="lbl_WasteMimimumOFValue" text="Label">
-                        <font>
-                           <Font name="Segoe UI" size="24.0" />
-                        </font>
-                     </Label>
-                  </children>
-                  <HBox.margin>
-                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                  </HBox.margin>
-               </VBox>
-               <VBox fillWidth="false" layoutX="20.0" layoutY="20.0">
-                  <children>
-                     <Label text="O.F. Integer Value (Minimum waste)" textFill="#949090" />
-                     <Label fx:id="lbl_OFMinimumWasteIntegerValue" text="Label">
-                        <font>
-                           <Font name="Segoe UI" size="24.0" />
-                        </font>
-                     </Label>
-                  </children>
-                  <HBox.margin>
-                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                  </HBox.margin>
-               </VBox>
-            </children>
-         </HBox>
+         <HBox fx:id="hbx_panel2" layoutX="10.0" layoutY="13.0" />
         </VBox>
     </bottom>
     <center>
@@ -174,7 +132,6 @@
                         <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <items>
                               <CheckBox fx:id="chbx_IntegerOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Integer O.F." />
-                              <CheckBox fx:id="chbx_DualOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Dual O.F." />
                               <CheckBox fx:id="chbx_RelaxedOF" mnemonicParsing="false" onAction="#updateLineChart" selected="true" text="Display Relaxed O.F." />
                               <CheckBox fx:id="chbx_waste" mnemonicParsing="false" onAction="#updateLineChart" text="Display Waste Trend" />
                            </items>
@@ -201,12 +158,76 @@
                 </Tab>
                 <Tab text="Solution">
                     <content>
-                        <BorderPane fx:id="brdPn_textSolution" prefHeight="200.0" prefWidth="200.0" />
+                        <BorderPane fx:id="brdPn_1" prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <HBox fx:id="hbx_panel1" BorderPane.alignment="CENTER">
+                           <children>
+                              <VBox fillWidth="false">
+                                 <children>
+                                    <Label text="# Cuts" textFill="#949090" />
+                                    <Label fx:id="lbl_numberOfCuts" text="Label">
+                                       <font>
+                                          <Font name="Segoe UI" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox fillWidth="false">
+                                 <children>
+                                    <Label text="Waste" textFill="#949090" />
+                                    <Label fx:id="lbl_waste" text="Label">
+                                       <font>
+                                          <Font name="Segoe UI" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </top></BorderPane>
                     </content>
                 </Tab>
                 <Tab text="Solution (Minimum Waste)">
                     <content>
-                        <BorderPane fx:id="brdPn_SolutionMinimumWaste" prefHeight="200.0" prefWidth="200.0" />
+                        <BorderPane fx:id="brdPn_2" prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <HBox fx:id="hbx_panel2" BorderPane.alignment="CENTER">
+                           <children>
+                              <VBox fillWidth="false">
+                                 <children>
+                                    <Label text="# Cuts" textFill="#949090" />
+                                    <Label fx:id="lbl_numberOfCuts_minimumWaste" text="Label">
+                                       <font>
+                                          <Font name="Segoe UI" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox fillWidth="false" layoutX="20.0" layoutY="20.0">
+                                 <children>
+                                    <Label text="Waste" textFill="#949090" />
+                                    <Label fx:id="lbl_waste_minimumWaste" text="Label">
+                                       <font>
+                                          <Font name="Segoe UI" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </top></BorderPane>
                     </content>
                 </Tab>
             </tabs>

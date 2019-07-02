@@ -34,9 +34,8 @@ public class CuttingStockProblem {
         this.task = new TimerTask() {
             @Override
             public void run() {
-
-                //timeOut = true;
-                cuttingStockSolution.setCurrentSolutionAsApproximate();
+                cuttingStockSolution.setTimeOut();
+                timeOut = true;
             }
         };
     }
@@ -52,8 +51,7 @@ public class CuttingStockProblem {
         executeColumnGenerationAlgorithm();
 
         long finish = System.currentTimeMillis();
-
-        this.cuttingStockSolution.setSolutionPatterns(buildSolutionPatterns(this.masterProblemSolution.getRoundedSolutions()));
+        
         this.cuttingStockSolution.setTimeElapsed(finish - start);
     }
 
@@ -63,7 +61,7 @@ public class CuttingStockProblem {
 
 
 
-    private Map<Integer, CuttingStockPattern> buildSolutionPatterns(double[] integerSolution) throws Exception {
+    private Map<Integer, CuttingStockPattern> buildSolutionPatterns(int[] integerSolution) throws Exception {
 
         Map<Integer, CuttingStockPattern> SolutionPattern = new HashMap<>();
         ArrayList<CuttingStockItem> cuttingStockItems = instance.getItems();
@@ -118,9 +116,12 @@ public class CuttingStockProblem {
 
     private void executeColumnGenerationAlgorithm() throws Exception {
 
+        Map<Integer, CuttingStockPattern> currentSolution;
+
         LinearProblemSolution masterProblemDualSolution;
         LinearProblemSolution knapsackSubProblemSolution;
-        double[] currentIntegerSolution;
+
+        int[] currentIntegerSolution;
         double[] currentMasterProblemDualSolution;
         double currentWaste;
 
@@ -129,33 +130,27 @@ public class CuttingStockProblem {
             this.masterProblemSolution = this.masterProblem.getSolution();
             masterProblemDualSolution = this.masterProblem.getDualSolution();
 
-            this.cuttingStockSolution.addRelaxedObjectiveFunctionValue(this.masterProblemSolution.getValueObjectiveFunction());
+            currentIntegerSolution = this.masterProblemSolution.getIntegerSolutions();
+            currentMasterProblemDualSolution = masterProblemDualSolution.getRealSolutions();
 
-            currentMasterProblemDualSolution = masterProblemDualSolution.getSolutions();
-            currentIntegerSolution = this.masterProblemSolution.getRoundedSolutions();
-            currentWaste = computeWasteFromPattern(buildSolutionPatterns(currentIntegerSolution));
+            this.cuttingStockSolution.addObjectiveFunctionRealValue(this.masterProblemSolution.getRealValueOfObjectiveFunction());
+            this.cuttingStockSolution.addObjectiveFunctionIntegerValue(this.masterProblemSolution.getIntegerValueOfObjectiveFunction());
 
-            double objectiveFunctionValue = 0.0;
-            for (Double value : currentIntegerSolution){
-                objectiveFunctionValue += value;
+            currentSolution = buildSolutionPatterns(currentIntegerSolution);
+            currentWaste = computeWasteFromPattern(currentSolution);
+
+            this.cuttingStockSolution.setCspSolutionPatterns(currentSolution);
+
+            if (this.cuttingStockSolution.addWasteValueCheckingForMinimumValue(currentWaste)) {
+                this.cuttingStockSolution.setCspSolutionPatternsMinimumWaste(currentSolution);
+                this.cuttingStockSolution.setObjectiveFunctionValues_MinimumWaste(this.masterProblemSolution.getIntegerValueOfObjectiveFunction());
             }
-            this.cuttingStockSolution.addObjectiveFunctionValue(objectiveFunctionValue);
-            this.cuttingStockSolution.addWasteValue(currentWaste);
-
-
-            double masterProblemDualSolutionValue = 0.0;
-            for (Double value : currentMasterProblemDualSolution){
-                masterProblemDualSolutionValue += value;
-            }
-            this.cuttingStockSolution.addDualObjectiveFunctionValue(masterProblemDualSolutionValue);
-
-
             this.knapsackSubProblem.changeObjectiveFunctionCoefficients(currentMasterProblemDualSolution);
             knapsackSubProblemSolution = this.knapsackSubProblem.getSolution();
 
-            if (1 - knapsackSubProblemSolution.getValueObjectiveFunction() < 0) {
+            if (1 - knapsackSubProblemSolution.getRealValueOfObjectiveFunction() < 0) {
 
-                double[] newColumn = knapsackSubProblemSolution.getSolutions();
+                double[] newColumn = knapsackSubProblemSolution.getRealSolutions();
 
                 this.masterProblem.addNewColumn(0.0, GRB.INFINITY, 1.0, VariableType.REAL, newColumn);
                 this.cuttingStockSolution.increaseTotalNumberOfColumnsAdded();

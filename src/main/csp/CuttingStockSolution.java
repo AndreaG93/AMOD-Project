@@ -1,156 +1,150 @@
 package csp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CuttingStockSolution {
 
-    private Map<Integer, CuttingStockPattern> SolutionPatterns;
+    private Map<Integer, CuttingStockPattern> cspSolutionPatterns;
+    private Map<Integer, CuttingStockPattern> cspSolutionMinimumWaste;
 
     private int totalNumberOfColumnsAdded;
     private long timeElapsed;
-    private boolean isCurrentSolutionApproximated;
+    private boolean isTimeOut;
 
-    private ArrayList<Double> objectiveFunctionValues;
-    private ArrayList<Double> dualObjectiveFunctionValues;
-    private ArrayList<Double> relaxedObjectiveFunctionValues;
+    private ArrayList<Double> objectiveFunctionIntegerValues;
+    private ArrayList<Double> objectiveFunctionRealValues;
     private ArrayList<Double> wasteValues;
 
-    private double minimumObjectiveFunctionValues;
-    private double minimumRelaxedObjectiveFunctionValues;
+    private double objectiveFunctionValues_MinimumWaste;
     private double minimumWaste;
 
-    private int iterationIndex = 0;
-    private int indexWhenOFIntegerIsMinimum = 0;
-    private int indexWhenWasteIsMinimum = 0;
-
     CuttingStockSolution(){
-        //this.SolutionPatterns = new HashMap<>();
 
-        this.relaxedObjectiveFunctionValues = new ArrayList<>();
-        this.objectiveFunctionValues = new ArrayList<>();
+        this.objectiveFunctionRealValues = new ArrayList<>();
+        this.objectiveFunctionIntegerValues = new ArrayList<>();
         this.wasteValues = new ArrayList<>();
-        this.dualObjectiveFunctionValues = new ArrayList<>();
 
-        this.isCurrentSolutionApproximated = false;
-        this.minimumObjectiveFunctionValues = Double.POSITIVE_INFINITY;
         this.minimumWaste = Double.POSITIVE_INFINITY;
     }
 
-    public void addWasteValue(double currentWaste) {
+    // --------------------------------------------------------------- //
+    // SETTER
+    // --------------------------------------------------------------- //
+
+    void addObjectiveFunctionRealValue(double value){
+        this.objectiveFunctionRealValues.add(value);
+    }
+
+    void addObjectiveFunctionIntegerValue(double value) {
+        this.objectiveFunctionIntegerValues.add(value);
+    }
+
+    boolean addWasteValueCheckingForMinimumValue(double currentWaste) {
+
         this.wasteValues.add(currentWaste);
 
         if (minimumWaste > currentWaste) {
             minimumWaste = currentWaste;
-            indexWhenWasteIsMinimum = iterationIndex;
+            return true;
         }
+
+        return false;
     }
 
-    void addRelaxedObjectiveFunctionValue(double value){
-        this.relaxedObjectiveFunctionValues.add(value);
-        minimumRelaxedObjectiveFunctionValues = value;
-    }
-
-    void addObjectiveFunctionValue(double value) {
-        iterationIndex++;
-        this.objectiveFunctionValues.add(value);
-
-        if (minimumObjectiveFunctionValues > value) {
-            minimumObjectiveFunctionValues = value;
-            indexWhenOFIntegerIsMinimum = iterationIndex;
-        }
-    }
-
-    public double getWasteValueWhenOFIntegerValueIsMinimum() {
-        return this.wasteValues.get(indexWhenOFIntegerIsMinimum);
-    }
-
-    public Map<Integer, CuttingStockPattern> getSolutionPatterns() {
-        return SolutionPatterns;
-    }
-
-    public void setSolutionPatterns(Map<Integer, CuttingStockPattern> solutionPatterns) {
-        SolutionPatterns = solutionPatterns;
+    void setTimeElapsed(long timeElapsed) {
+        this.timeElapsed = timeElapsed;
     }
 
     void increaseTotalNumberOfColumnsAdded(){
         this.totalNumberOfColumnsAdded++;
     }
 
-
-    public int getTotalNumberOfColumnsAdded() {
-        return totalNumberOfColumnsAdded;
+    public boolean isTimeOut() {
+        return this.isTimeOut;
     }
 
-
-    public long getTimeElapsed() {
-        return timeElapsed;
+    void setTimeOut() {
+        this.isTimeOut = true;
     }
 
-    public void setTimeElapsed(long timeElapsed) {
-        this.timeElapsed = timeElapsed;
+    void setCspSolutionPatterns(Map<Integer, CuttingStockPattern> input) {
+        this.cspSolutionPatterns = input;
     }
 
-    public double getMinimumRealObjectiveFunctionValue() {
-        return minimumRelaxedObjectiveFunctionValues;
+    void setCspSolutionPatternsMinimumWaste(Map<Integer, CuttingStockPattern> input) {
+        this.cspSolutionMinimumWaste = input;
     }
 
-    public ArrayList<CuttingStockPattern> getPatterns(){
+    public void setObjectiveFunctionValues_MinimumWaste(double objectiveFunctionValues_MinimumWaste) {
+        this.objectiveFunctionValues_MinimumWaste = objectiveFunctionValues_MinimumWaste;
+    }
+
+    // --------------------------------------------------------------- //
+    // GETTERS (for GUI)
+    // --------------------------------------------------------------- //
+
+    public ArrayList<CuttingStockPattern> getCspSolutionPatterns(){
 
         ArrayList<CuttingStockPattern> output = new ArrayList<>();
 
-        for (Map.Entry<Integer, CuttingStockPattern> pair : SolutionPatterns.entrySet()) {
+        for (Map.Entry<Integer, CuttingStockPattern> pair : this.cspSolutionPatterns.entrySet())
             output.add(pair.getValue());
-        }
 
         return output;
     }
 
-    public void setCurrentSolutionAsApproximate(){
-        this.isCurrentSolutionApproximated = true;
+    public ArrayList<CuttingStockPattern> getCspSolutionPatternsMinimumWaste() {
+
+        ArrayList<CuttingStockPattern> output = new ArrayList<>();
+
+        for (Map.Entry<Integer, CuttingStockPattern> pair : this.cspSolutionMinimumWaste.entrySet())
+            output.add(pair.getValue());
+
+        return output;
     }
 
-    public boolean isCurrentSolutionApproximated() {
-        return isCurrentSolutionApproximated;
+    public Map<Integer, CuttingStockPattern> getSolutionPatternsAsMap() {
+        return this.cspSolutionPatterns;
     }
 
-    public ArrayList<Double> getRelaxedObjectiveFunctionValues() {
-        return relaxedObjectiveFunctionValues;
+    public ArrayList<Double> getObjectiveFunctionRealValues() {
+        return this.objectiveFunctionRealValues;
     }
 
-    public ArrayList<Double> getObjectiveFunctionValues() {
-        return objectiveFunctionValues;
+    public ArrayList<Double> getObjectiveFunctionIntegerValues() {
+        return this.objectiveFunctionIntegerValues;
     }
-
-    public double getMinimumIntegerObjectiveFunctionValue() {
-        return this.minimumObjectiveFunctionValues;
-    }
-
-
 
     public ArrayList<Double> getWasteValues() {
         return wasteValues;
     }
 
-    public double getWasteLastValues() {
-        return this.wasteValues.get(this.wasteValues.size()-1);
+    public int getTotalNumberOfColumnsAdded() {
+        return totalNumberOfColumnsAdded;
     }
 
-    public double getMinimumWaste() {
+    public long getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public double getObjectiveFunctionReal() {
+        return this.objectiveFunctionRealValues.get(this.objectiveFunctionRealValues.size() - 1);
+    }
+
+    public double getObjectiveFunctionInteger() {
+        return this.objectiveFunctionIntegerValues.get(this.objectiveFunctionIntegerValues.size() - 1);
+    }
+
+    public double getWaste_Minimum() {
         return minimumWaste;
     }
 
-    public double getMinimumWasteIntegerObjectiveFunctionValue() {
-        return objectiveFunctionValues.get(indexWhenWasteIsMinimum);
+    public double getWaste() {
+        return this.wasteValues.get(this.wasteValues.size()-1);
     }
 
-
-    public void addDualObjectiveFunctionValue(double value) {
-        this.dualObjectiveFunctionValues.add(value);
-    }
-
-    public ArrayList<Double> getDualObjectiveFunctionValues() {
-        return dualObjectiveFunctionValues;
+    public double getObjectiveFunctionInteger_MinimumWaste() {
+       return this.objectiveFunctionValues_MinimumWaste;
     }
 }
