@@ -29,10 +29,15 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private HBox hbx_panel1;
     @FXML
     private HBox hbx_panel2;
+
     @FXML
     private BorderPane brdPn_1;
     @FXML
+    private BorderPane brdPn_1_2;
+    @FXML
     private BorderPane brdPn_2;
+    @FXML
+    private BorderPane brdPn_2_2;
 
     // Charts
 
@@ -103,10 +108,18 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
 
         displaySolutionTables(this.brdPn_1, cuttingStockSolution.getCspSolutionPatterns());
         displaySolutionTables(this.brdPn_2, cuttingStockSolution.getCspSolutionPatternsMinimumWaste());
+
+        CuttingStockSolutionViewerOutputTable table1Produced = new CuttingStockSolutionViewerOutputTable();
+        table1Produced.addData(cuttingStockSolution.getSolutionPatternsAsMap(), cuttingStockSolution.getCspInstance().getItems());
+        this.brdPn_1_2.setCenter(table1Produced);
+
+        CuttingStockSolutionViewerOutputTable table2Produced = new CuttingStockSolutionViewerOutputTable();
+        table2Produced.addData(cuttingStockSolution.getSolutionPatternsMinimumWasteAsMap(), cuttingStockSolution.getCspInstance().getItems());
+        this.brdPn_2_2.setCenter(table2Produced);
     }
 
     private void displaySolutionTables(BorderPane borderPane, Collection<CuttingStockPattern> solution) {
-        CuttingStockSolutionViewerTable table = new CuttingStockSolutionViewerTable();
+        CuttingStockSolutionViewerTable table = new CuttingStockSolutionViewerTable(cuttingStockSolution.getCspInstance().getMaxItemLength());
 
         table.setItems(FXCollections.observableArrayList(solution));
         borderPane.setCenter(table);

@@ -19,7 +19,11 @@ public class CuttingStockSolution {
     private double objectiveFunctionValues_MinimumWaste;
     private double minimumWaste;
 
-    CuttingStockSolution(){
+    private final CuttingStockInstance cspInstance;
+
+    CuttingStockSolution(CuttingStockInstance cspInstance){
+
+        this.cspInstance = cspInstance;
 
         this.objectiveFunctionRealValues = new ArrayList<>();
         this.objectiveFunctionIntegerValues = new ArrayList<>();
@@ -108,6 +112,10 @@ public class CuttingStockSolution {
         return this.cspSolutionPatterns;
     }
 
+    public Map<Integer, CuttingStockPattern> getSolutionPatternsMinimumWasteAsMap() {
+        return this.cspSolutionMinimumWaste;
+    }
+
     public ArrayList<Double> getObjectiveFunctionRealValues() {
         return this.objectiveFunctionRealValues;
     }
@@ -146,5 +154,9 @@ public class CuttingStockSolution {
 
     public double getObjectiveFunctionInteger_MinimumWaste() {
        return this.objectiveFunctionValues_MinimumWaste;
+    }
+
+    public CuttingStockInstance getCspInstance() {
+        return cspInstance;
     }
 }

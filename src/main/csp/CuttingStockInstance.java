@@ -16,11 +16,11 @@ public class CuttingStockInstance {
         this.items.add(new CuttingStockItem(amount, length));
     }
 
-    double getMaxItemLength() {
+    public double getMaxItemLength() {
         return maxItemLength;
     }
 
-    ArrayList<CuttingStockItem> getItems() {
+    public ArrayList<CuttingStockItem> getItems() {
         return items;
     }
 }

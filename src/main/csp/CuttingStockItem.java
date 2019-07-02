@@ -1,6 +1,6 @@
 package csp;
 
-class CuttingStockItem {
+public class CuttingStockItem {
 
     private final double amount;
     private final double length;
@@ -10,11 +10,11 @@ class CuttingStockItem {
         this.length = length;
     }
 
-    double getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    double getLength() {
+    public double getLength() {
         return length;
     }
 }

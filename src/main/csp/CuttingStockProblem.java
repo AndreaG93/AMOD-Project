@@ -28,7 +28,7 @@ public class CuttingStockProblem {
 
         this.masterProblem = new GurobiLinearProblem();
         this.knapsackSubProblem = new GurobiLinearProblem();
-        this.cuttingStockSolution = new CuttingStockSolution();
+        this.cuttingStockSolution = new CuttingStockSolution(instance);
 
         this.timer = new Timer();
         this.task = new TimerTask() {
@@ -51,15 +51,13 @@ public class CuttingStockProblem {
         executeColumnGenerationAlgorithm();
 
         long finish = System.currentTimeMillis();
-        
+
         this.cuttingStockSolution.setTimeElapsed(finish - start);
     }
 
     public CuttingStockSolution getCuttingStockSolution() {
         return cuttingStockSolution;
     }
-
-
 
     private Map<Integer, CuttingStockPattern> buildSolutionPatterns(int[] integerSolution) throws Exception {
 

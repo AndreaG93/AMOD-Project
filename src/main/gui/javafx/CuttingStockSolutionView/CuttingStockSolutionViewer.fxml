@@ -103,8 +103,7 @@
                   </VBox>
                     </children>
                 </HBox>
-         <Separator layoutX="10.0" layoutY="10.0" prefWidth="200.0" />
-         <HBox fx:id="hbx_panel2" layoutX="10.0" layoutY="13.0" />
+        
         </VBox>
     </bottom>
     <center>
@@ -158,7 +157,7 @@
                 </Tab>
                 <Tab text="Solution">
                     <content>
-                        <BorderPane fx:id="brdPn_1" prefHeight="200.0" prefWidth="200.0">
+                        <BorderPane>
                      <top>
                         <HBox fx:id="hbx_panel1" BorderPane.alignment="CENTER">
                            <children>
@@ -190,12 +189,28 @@
                               </VBox>
                            </children>
                         </HBox>
-                     </top></BorderPane>
+                     </top>
+                     <center>
+                        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                          <tabs>
+                            <Tab text="Patterns">
+                                 <content>
+                                    <BorderPane fx:id="brdPn_1" />
+                                 </content>
+                            </Tab>
+                            <Tab text="Item produced">
+                                 <content>
+                                    <BorderPane fx:id="brdPn_1_2" />
+                                 </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </center></BorderPane>
                     </content>
                 </Tab>
                 <Tab text="Solution (Minimum Waste)">
                     <content>
-                        <BorderPane fx:id="brdPn_2" prefHeight="200.0" prefWidth="200.0">
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
                         <HBox fx:id="hbx_panel2" BorderPane.alignment="CENTER">
                            <children>
@@ -227,7 +242,23 @@
                               </VBox>
                            </children>
                         </HBox>
-                     </top></BorderPane>
+                     </top>
+                            <center>
+                                <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                                    <tabs>
+                                        <Tab text="Patterns">
+                                            <content>
+                                                <BorderPane fx:id="brdPn_2" />
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Item produced">
+                                            <content>
+                                                <BorderPane fx:id="brdPn_2_2" />
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </center></BorderPane>
                     </content>
                 </Tab>
             </tabs>
