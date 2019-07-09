@@ -5,7 +5,10 @@ import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-class FileManager {
+/**
+ * This class is used to display a file picker!
+ */
+class JavaSwingFilePicker {
 
 	/**
 	 * This method is used to get a {@code File} object.
@@ -14,7 +17,7 @@ class FileManager {
 	 *            - Represents a {@code String} object.
 	 * @return A {@code File} object.
 	 */
-	static File getFile(String validExtension) throws Exception {
+	static File getFile(String validExtension) {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(validExtension, validExtension);
 
@@ -31,7 +34,7 @@ class FileManager {
 		if (returnVal == JFileChooser.APPROVE_OPTION && isValidFile(myFile, validExtension))
 			return myFile;
 
-		throw new Exception("Invalid input.");
+		return null;
 	}
 
 	/**
@@ -43,7 +46,7 @@ class FileManager {
 	 *            - Represents a {@code String[]} object.
 	 * @return A {@code boolean}.
 	 */
-	static boolean isValidFile(File myFile, String... requiredExtensions) throws Exception {
+	static private boolean isValidFile(File myFile, String... requiredExtensions) {
 
 		if (myFile.exists() && myFile.isFile()) {
 
@@ -61,9 +64,9 @@ class FileManager {
 					break;
 				}
 		    }
-			
-			if (extension != null && isValidExtension)
-				return true;
+
+            return (extension != null && isValidExtension);
+
 		}
 		return false;
 	}

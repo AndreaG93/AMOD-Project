@@ -4,15 +4,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import gui.javafx.UserInterfaceJavaFX;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class LoadingScreen extends UserInterfaceJavaFX {
 

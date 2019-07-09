@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CuttingStockSolutionViewerOutputTable extends TableView<CuttingStockSolutionViewerOutputTableRow> {
+class CuttingStockSolutionViewerOutputTable extends TableView<CuttingStockSolutionViewerOutputTableRow> {
 
-    public CuttingStockSolutionViewerOutputTable() {
+    CuttingStockSolutionViewerOutputTable() {
 
         TableColumn<CuttingStockSolutionViewerOutputTableRow, String> column1 = new TableColumn<>("Cut length");
         TableColumn<CuttingStockSolutionViewerOutputTableRow, String> column2 = new TableColumn<>("Amount produced");

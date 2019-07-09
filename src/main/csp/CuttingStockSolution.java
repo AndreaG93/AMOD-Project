@@ -3,19 +3,36 @@ package csp;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * This class is used to model the solution for a specified CSP-Instance.
+ *
+ * @author Andrea Graziani
+ * @version 1.0
+ */
 public class CuttingStockSolution {
 
+    // Following hash-table is used to hold a reference to all CSP-solution cutting patterns.
     private Map<Integer, CuttingStockPattern> cspSolutionPatterns;
+    // SPECIAL: Following hash-table is used to hold a reference to all minimum-waste CSP-solution cutting patterns.
+    // Using that solution, the number of necessary cuts is not minimal.
     private Map<Integer, CuttingStockPattern> cspSolutionMinimumWaste;
 
     private int totalNumberOfColumnsAdded;
     private long timeElapsed;
     private boolean isTimeOut;
 
-    private ArrayList<Double> objectiveFunctionIntegerValues;
+    // That list is used to hold all "Restricted Master Problem" objective-function (O.F) values
+    // during column generation algorithm (it is used for chart generation!)
     private ArrayList<Double> objectiveFunctionRealValues;
+
+    // That list is used to hold all "NOT RELAXED Master Problem" objective-function (O.F) values
+    // during column generation algorithm (it is used for chart generation!)
+    private ArrayList<Double> objectiveFunctionIntegerValues;
+
+    // SPECIAL: following list holds all waste-value detected during column generation algorithm! (it is used for chart generation!)
     private ArrayList<Double> wasteValues;
 
+    // Following variables are used for minimum-waste CSP-solution
     private double objectiveFunctionValues_MinimumWaste;
     private double minimumWaste;
 

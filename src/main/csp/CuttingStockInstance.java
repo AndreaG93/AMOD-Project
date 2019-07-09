@@ -2,9 +2,17 @@ package csp;
 
 import java.util.*;
 
+/**
+ * This class is used to model a CSP instance.
+ *
+ * @author Andrea Graziani
+ * @version 1.0
+ */
 public class CuttingStockInstance {
 
+    // Stock material width
     private final double maxItemLength;
+    // Items required by customers
     private ArrayList<CuttingStockItem> items;
 
     public CuttingStockInstance(double maxItemLength) {

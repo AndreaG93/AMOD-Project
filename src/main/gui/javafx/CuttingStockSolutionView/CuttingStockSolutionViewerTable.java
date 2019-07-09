@@ -10,11 +10,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
-import java.awt.geom.Arc2D;
+class CuttingStockSolutionViewerTable extends TableView<CuttingStockPattern> {
 
-public class CuttingStockSolutionViewerTable extends TableView<CuttingStockPattern> {
-
-    public CuttingStockSolutionViewerTable(double maxLength) {
+    CuttingStockSolutionViewerTable(double maxLength) {
 
         TableColumn<CuttingStockPattern, String> column1 = new TableColumn<>("Cardinality");
         TableColumn<CuttingStockPattern, String> column2 = new TableColumn<>("Pattern");

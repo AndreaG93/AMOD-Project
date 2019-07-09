@@ -1,5 +1,11 @@
 package linearproblem;
 
+/**
+ * This class is used to model an ILP solution but for CSP-problems only.
+ *
+ * @author Andrea Graziani
+ * @version 1.0
+ */
 public class LinearProblemSolution {
 
     private int[] integerSolutions;
@@ -16,6 +22,7 @@ public class LinearProblemSolution {
         this.realValueOfObjectiveFunction = realValueOfObjectiveFunction;
         this.realSolutions = realSolutions;
 
+        // Integer solution are computed rounding real solutions.
         for (int i = 0; i < this.realSolutions.length; i++){
 
             this.integerSolutions[i] = (int) Math.ceil(this.realSolutions[i]);

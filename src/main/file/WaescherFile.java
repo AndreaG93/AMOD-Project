@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * This class is used to generate a CSP-instance from "Waescher" files.
+ */
 public class WaescherFile {
 
     private final static String TXT_EXTENSION = "txt";
@@ -19,7 +22,12 @@ public class WaescherFile {
 
         try {
 
-            file = FileManager.getFile(TXT_EXTENSION);
+            file = JavaSwingFilePicker.getFile(TXT_EXTENSION);
+            if (file == null){
+                System.out.println("No file selected!");
+                System.exit(-1);
+            }
+
             scanner = new Scanner(file);
 
             // Ignore first line!!

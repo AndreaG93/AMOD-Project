@@ -7,6 +7,12 @@ import linearproblem.LinearProblemType;
 import linearproblem.utility.MathematicalSymbol;
 import linearproblem.utility.VariableType;
 
+/**
+ * This class represent an adapter for GUROBI ILP-solver.
+ *
+ * @author Andrea Graziani
+ * @version 1.0
+ */
 public class GurobiLinearProblem implements LinearProblem {
 
     private GRBModel linearProblem;

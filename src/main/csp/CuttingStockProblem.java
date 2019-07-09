@@ -10,6 +10,17 @@ import linearproblem.utility.VariableType;
 
 import java.util.*;
 
+/**
+ * This class is used to model a CSP problem corresponding to a specified CSP-Instance.
+ *
+ * In other words, it holds a reference to "Restricted Master Problem" ("masterProblem" variable) and to "Slave Problem"
+ * ("knapsackSubProblem" variable).
+ *
+ * That class is responsible for the execution of column generation algorithm.
+ *
+ * @author Andrea Graziani
+ * @version 1.0
+ */
 public class CuttingStockProblem {
 
     private final CuttingStockInstance instance;
