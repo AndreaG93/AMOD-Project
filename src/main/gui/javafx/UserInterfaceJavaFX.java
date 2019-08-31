@@ -5,9 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.text.MessageFormat;
-
 
 /**
  * This class represent an user graphical interface based on JavaFX system.

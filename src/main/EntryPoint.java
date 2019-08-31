@@ -24,3 +24,5 @@ public class EntryPoint extends Application {
         launch(args);
     }
 }
+
+// java --module-path .\src\libraries\javafx-sdk-12.0.2\lib --add-modules javafx.controls,javafx.fxml -jar .\AMOD-Project.jar

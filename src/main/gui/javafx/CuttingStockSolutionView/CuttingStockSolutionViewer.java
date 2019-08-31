@@ -29,7 +29,6 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private HBox hbx_panel1;
     @FXML
     private HBox hbx_panel2;
-
     @FXML
     private BorderPane brdPn_1;
     @FXML
@@ -40,7 +39,6 @@ public class CuttingStockSolutionViewer extends UserInterfaceJavaFX {
     private BorderPane brdPn_2_2;
 
     // Charts
-
     @FXML
     private LineChart<Number, Number> fx_ObjectiveLineChart;
     @FXML
